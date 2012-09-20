@@ -5,7 +5,7 @@
 int main(int argc, char* args[])
 {
     StateManager sm;
-    sm.init("Tetris! Awesome!!");
+    sm.init("Quadris! Awesome!!");
 
     TetrisScreen* ts = new TetrisScreen();
     ts->init();

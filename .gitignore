@@ -1,1 +1,5 @@
 bin/
+obj/
+
+#Code::Blocks project file
+Quadris.cbp
