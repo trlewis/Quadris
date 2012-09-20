@@ -17,6 +17,11 @@
 class TetrisBoard
 {
 public:
+	enum BoardEvent {
+		SINGLE_LINE, DOUBLE_LINE, TRIPLE_LINE, QUAD_LINE, HOLD,
+		ROTATE, PIECE_PLACE, LEVEL_UP, GAME_WIN, NONE
+	};
+
     static const int NUM_HIDDEN_ROWS = 2;
 
 	TetrisBoard();
@@ -53,7 +58,8 @@ public:
 	std::vector<TetrisPiece*> getBag();
 
 	std::string toString();
-
+	bool isEvents();//whether or not there are events not returned
+	BoardEvent getEvent();//get the top event on the stack
 	std::string getStats();
 private:
 	static const int DEFAULT_BOARD_WIDTH  = 10;
@@ -66,6 +72,8 @@ private:
 	TetrisPiece* my_hold_piece;
 	std::vector<TetrisPiece*> my_bag;
 	std::vector<std::vector<TetrisPiece::PieceType>* > my_board; // my_board[y][x]
+	std::vector<BoardEvent> my_events; //gives user info on what's happening (should be a queue...)
+
 	bool held; //to prevent holding before placing a piece
 	bool game_over;
 	int score, level, lines;

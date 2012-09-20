@@ -77,6 +77,7 @@ void TetrisBoard::hardDrop()
 void TetrisBoard::rotateCCW()
 {
     TetrisPiece* test = my_piece->rotateCCW();
+    bool can_rotate = false;
 
     if(isWithinBounds(test))
     {
@@ -84,17 +85,36 @@ void TetrisBoard::rotateCCW()
         {
             test = test->moveUp();
             if(!isOverlap(test) && isWithinBounds(test))
-            {
-            	my_piece = test;
-            	stat_ccw++;
-            }
+            	can_rotate = true;
         }
         else
-        {
-        	my_piece = test;
-        	stat_ccw++;
-        }
+        	can_rotate = true;
     }
+
+    if(can_rotate)
+    {
+    	my_piece = test;
+    	stat_ccw++;
+    	my_events.push_back(TetrisBoard::ROTATE);
+    }
+
+//    if(isWithinBounds(test))
+//    {
+//        if(isOverlap(test))
+//        {
+//            test = test->moveUp();
+//            if(!isOverlap(test) && isWithinBounds(test))
+//            {
+//            	my_piece = test;
+//            	stat_ccw++;
+//            }
+//        }
+//        else
+//        {
+//        	my_piece = test;
+//        	stat_ccw++;
+//        }
+//    }
     handleGhost();
 }
 
@@ -102,23 +122,44 @@ void TetrisBoard::rotateCW()
 {
     TetrisPiece* test = my_piece->rotateCW();
 
+    bool can_rotate = false;
+
     if(isWithinBounds(test))
     {
         if(isOverlap(test))
         {
             test = test->moveUp();
             if(!isOverlap(test) && isWithinBounds(test))
-            {
-            	my_piece = test;
-            	stat_cw++;
-            }
+            	can_rotate = true;
         }
         else
-        {
-        	my_piece = test;
-        	stat_cw++;
-        }
+        	can_rotate = true;
     }
+
+    if(can_rotate)
+    {
+    	my_piece = test;
+    	stat_cw++;
+    	my_events.push_back(TetrisBoard::ROTATE);
+    }
+
+//    if(isWithinBounds(test))
+//    {
+//        if(isOverlap(test))
+//        {
+//            test = test->moveUp();
+//            if(!isOverlap(test) && isWithinBounds(test))
+//            {
+//            	my_piece = test;
+//            	stat_cw++;
+//            }
+//        }
+//        else
+//        {
+//        	my_piece = test;
+//        	stat_cw++;
+//        }
+//    }
     handleGhost();
 }
 
@@ -141,6 +182,7 @@ void TetrisBoard::holdPiece()
             newPiece();
         }
         stat_holds++;
+        my_events.push_back(TetrisBoard::HOLD);
     }
 }
 
@@ -256,6 +298,19 @@ std::string TetrisBoard::toString()
     }
 
     return ss.str();
+}
+
+bool TetrisBoard::isEvents() { return my_events.size() == 0; }
+
+TetrisBoard::BoardEvent TetrisBoard::getEvent()
+{
+	if(my_events.size() > 0)
+	{
+		BoardEvent e = my_events.back();
+		my_events.pop_back();
+		return e;
+	}
+	return TetrisBoard::NONE;
 }
 
 std::string TetrisBoard::getStats()
@@ -382,6 +437,7 @@ void TetrisBoard::placePiece()
 
         handleLines();
         newPiece();
+        my_events.push_back(TetrisBoard::PIECE_PLACE);
     }
 
 }
@@ -469,14 +525,34 @@ void TetrisBoard::handleLines()
 
     lines += numlines;
 
+    //update level
+    if(numlines > 0 && lines / 10 > level)
+    {
+    	level++;
+    	my_events.push_back(TetrisBoard::LEVEL_UP);
+    }
+
+
     if(numlines == 1)
+    {
     	stat_singles++;
+    	my_events.push_back(TetrisBoard::SINGLE_LINE);
+    }
     else if(numlines == 2)
+    {
     	stat_doubles++;
+    	my_events.push_back(TetrisBoard::DOUBLE_LINE);
+    }
     else if(numlines == 3)
+    {
     	stat_triples++;
+    	my_events.push_back(TetrisBoard::TRIPLE_LINE);
+    }
     else if(numlines == 4)
+    {
     	stat_quads++;
+    	my_events.push_back(TetrisBoard::QUAD_LINE);
+    }
 
     //UPDATE SCORE
     if(numlines > 0)
