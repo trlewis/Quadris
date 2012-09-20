@@ -1,0 +1,24 @@
+the 2x5 grid of pixels on the top left of 
+the image is where data is stored about
+the bitmap font file.
+
+
+[X][ ] this pixel holds the "delimiter"
+[ ][ ] color. the (pixel) color that
+[ ][ ] seperates the images of different
+[ ][ ] ascii characters. it goes before
+[ ][ ] and after each character
+
+
+[ ][ ] spacing and whether or not to key
+[X][ ] R: # pixels between each character
+[ ][ ] G: # pixels between each line (in addition to the height of the image)
+[ ][ ] B: if B > 0, then color key the image
+[ ][ ]
+
+[ ][ ] the key color
+[ ][ ]
+[X][ ]
+[ ][ ]
+[ ][ ]
+
