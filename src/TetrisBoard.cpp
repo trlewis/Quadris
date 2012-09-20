@@ -33,6 +33,7 @@ void TetrisBoard::moveLeft()
     {
         my_piece = test;
         handleGhost();
+        stat_left++;
     }
 }
 
@@ -43,6 +44,7 @@ void TetrisBoard::moveRight()
     {
         my_piece = test;
         handleGhost();
+        stat_right++;
     }
 }
 
@@ -57,6 +59,7 @@ void TetrisBoard::moveDown()
         my_piece = test;
 
     handleGhost();
+    stat_down++;
 }
 
 void TetrisBoard::hardDrop()
@@ -65,7 +68,9 @@ void TetrisBoard::hardDrop()
     do
     {
         moveDown();
+        stat_down--;
     }while (my_piece->getLocation().y < y);
+    stat_hd++;
 }
 
 void TetrisBoard::rotateCCW()
@@ -78,10 +83,16 @@ void TetrisBoard::rotateCCW()
         {
             test = test->moveUp();
             if(!isOverlap(test) && isWithinBounds(test))
-                my_piece = test;
+            {
+            	my_piece = test;
+            	stat_ccw++;
+            }
         }
         else
-            my_piece = test;
+        {
+        	my_piece = test;
+        	stat_ccw++;
+        }
     }
     handleGhost();
 }
@@ -96,10 +107,16 @@ void TetrisBoard::rotateCW()
         {
             test = test->moveUp();
             if(!isOverlap(test) && isWithinBounds(test))
-                my_piece = test;
+            {
+            	my_piece = test;
+            	stat_cw++;
+            }
         }
         else
-            my_piece = test;
+        {
+        	my_piece = test;
+        	stat_cw++;
+        }
     }
     handleGhost();
 }
@@ -115,13 +132,14 @@ void TetrisBoard::holdPiece()
             my_hold_piece = temp;
             my_piece = my_piece->setLocation(board_width/2, board_height-1);
             handleGhost();
+            held = true;
         }
         else
         {
             my_hold_piece = my_piece;
             newPiece();
         }
-        held = true;
+        stat_holds++;
     }
 }
 
@@ -239,6 +257,25 @@ std::string TetrisBoard::toString()
     return ss.str();
 }
 
+std::string TetrisBoard::getStats()
+{
+	std::stringstream ss;
+	ss << "CW rotations: " << stat_cw << std::endl;
+	ss << "CCW rotations: " << stat_ccw << std::endl;
+	ss << "left moves: " << stat_left << std::endl;
+	ss << "right moves: " << stat_right << std::endl;
+	ss << "down moves: " << stat_down << std::endl;
+	ss << "hard drops: " << stat_hd << std::endl;
+	ss << "pieces held: " << stat_holds << std::endl;
+	ss << "pieces played: " << stat_pieces << std::endl;
+	ss << "single line clears: " << stat_singles << std::endl;
+	ss << "double line clears: " << stat_doubles << std::endl;
+	ss << "triple line clears: " << stat_triples << std::endl;
+	ss << "quad line clears: " << stat_quads << std::endl;
+
+	return ss.str();
+}
+
 bool TetrisBoard::isOverlap(TetrisPiece* piece)
 {
     std::vector<Point> blocks = piece->getBlocks();
@@ -323,6 +360,7 @@ void TetrisBoard::newPiece()
     my_bag.erase(my_bag.begin());
 
     my_piece = my_piece->setLocation(board_width/2, board_height-1);
+    stat_pieces++;
 
     //my_ghost = new TetrisPiece(my_piece->getPieceType());
     handleGhost();
@@ -395,6 +433,15 @@ void TetrisBoard::handleLines()
     } while(found);
 
     lines += numlines;
+
+    if(numlines == 1)
+    	stat_singles++;
+    else if(numlines == 2)
+    	stat_doubles++;
+    else if(numlines == 3)
+    	stat_triples++;
+    else if(numlines == 4)
+    	stat_quads++;
     //UPDATE SCORE
 }
 
@@ -462,4 +509,11 @@ void TetrisBoard::init(const int width, const int height)
 	newPiece();
 
 	my_hold_piece = new TetrisPiece(TetrisPiece::EMPTY_PIECE);
+
+	//init stats
+	stat_cw=0; stat_ccw=0; //# of rotations
+	stat_left=0; stat_right=0; stat_down=0; stat_hd=0; //number of moves/drops
+	stat_holds=0; //# of holds
+	stat_singles=0, stat_doubles=0, stat_triples=0, stat_quads=0; //#of clear types
+	stat_pieces=0;
 }

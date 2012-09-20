@@ -111,6 +111,7 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
             }
             //TODO: delete this!
             std::cout << board.toString() << "\n\n";
+            std::cout << board.getStats() << "\n";
         }
     }
 }

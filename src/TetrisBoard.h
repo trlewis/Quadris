@@ -53,6 +53,8 @@ public:
 	std::vector<TetrisPiece*> getBag();
 
 	std::string toString();
+
+	std::string getStats();
 private:
 	static const int DEFAULT_BOARD_WIDTH  = 10;
 	static const int DEFAULT_BOARD_HEIGHT = 22;
@@ -67,6 +69,13 @@ private:
 	bool held; //to prevent holding before placing a piece
 	bool game_over;
 	int score, level, lines;
+
+	//stats
+	int stat_cw, stat_ccw; //# of rotations
+	int stat_left, stat_right, stat_down, stat_hd; //number of moves/drops
+	int stat_holds; //# of holds
+	int stat_singles, stat_doubles, stat_triples, stat_quads; //#of clear types
+	int stat_pieces; //# of pieces played
 
 	bool isOverlap(TetrisPiece* piece);//tests to see if given piece overlaps anything on board
 	bool isWithinBounds(TetrisPiece* piece); //tests to see if the piece is inside the board boundaries
