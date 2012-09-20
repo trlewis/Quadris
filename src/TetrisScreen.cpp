@@ -103,7 +103,8 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
                     case SDLK_a:
                         board.holdPiece(); break;
                     case SDLK_ESCAPE:
-                        state_manager->quit(); break;
+                    	state_manager->popState(); break;
+                        //state_manager->quit(); break;
                     default:
                         break;
                 }
@@ -120,10 +121,12 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
     		if(e.type == SDL_KEYDOWN)
     		{
     			if(e.key.keysym.sym == SDLK_ESCAPE)
-    				state_manager->quit();
+    				//state_manager->quit();
+    				state_manager->popState();
     		}
     		else if(e.type == SDL_QUIT)
-    			state_manager->quit();
+    			//state_manager->quit();
+    			state_manager->popState();
     	}
     }
 }
