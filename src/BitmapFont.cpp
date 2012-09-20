@@ -103,6 +103,21 @@ void BitmapFont::drawString(std::string text, SDL_Surface* dest,
 	}
 }
 
+int BitmapFont::getStringWidth(std::string text)
+{
+	int width=0;
+	int letter=0;//ascii value of the letter
+
+	for(Uint32 i = 0 ; i < text.size() ; i++)
+	{
+		letter = (int)text[i];
+		width += letters[letter].w;
+	}
+	width += (char_space * text.size()); //hopefully that's a little faster
+
+	return width;
+}
+
 int BitmapFont::getHeight() { return source_img->h; }
 int BitmapFont::getLineSpacing() { return line_space; }
 int BitmapFont::getCharSpacing() { return char_space; }

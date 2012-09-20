@@ -24,6 +24,8 @@ public:
 
 	void drawString(std::string text, SDL_Surface* dest, SDL_Rect& box);
 
+	int getStringWidth(std::string text);
+
 	int getHeight();        //height of the font in px
 	int getLineSpacing();   //px between lines (not including font size)
 	int getCharSpacing();   //px between characters.

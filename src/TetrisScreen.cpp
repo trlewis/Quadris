@@ -11,14 +11,10 @@
 #include "SDL/SDL.h"
 
 #include "HelperFunctions.h"
+#include "BitmapFont.h"
 
 #include "TetrisScreen.h"
 
-
-
-
-
-//TODO: add a bitmap font to show info!
 
 
 void TetrisScreen::init()
@@ -30,6 +26,7 @@ void TetrisScreen::init()
     drop_delta = DEFAULT_DROP_DIFF;
     frr = FrameRateRegulator();
     drop_timer = Timer();
+    drop_timer.start();
 
     loadBlocks();
     blocksize = blocks.at(0)->w; //get the block size from one of the blocks...
@@ -54,6 +51,8 @@ void TetrisScreen::init()
     ghost_mask = SDL_MapRGB(ghost_surface->format, 255, 0 , 255);
     SDL_SetColorKey(ghost_surface, SDL_SRCCOLORKEY, ghost_mask);
 
+
+    font = new BitmapFont("resources/bluebluewithlayout.png");
     //start timer at the end here.
 }
 
@@ -80,9 +79,9 @@ void TetrisScreen::unpause()
 
 void TetrisScreen::handleEvents(StateManager* state_manager)
 {
+    SDL_Event e;
     if(!board.isGameOver())
     {
-        SDL_Event e;
         while(SDL_PollEvent(&e))
         {
             if(e.type == SDL_KEYDOWN)
@@ -110,19 +109,40 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
                 }
             }
             //TODO: delete this!
-            std::cout << board.toString() << "\n\n";
-            std::cout << board.getStats() << "\n";
+//            std::cout << board.toString() << "\n\n";
+//            std::cout << board.getStats() << "\n";
         }
+    }
+    else
+    {
+    	while(SDL_PollEvent(&e))
+    	{
+    		if(e.type == SDL_KEYDOWN)
+    		{
+    			if(e.key.keysym.sym == SDLK_ESCAPE)
+    				state_manager->quit();
+    		}
+    		else if(e.type == SDL_QUIT)
+    			state_manager->quit();
+    	}
     }
 }
 
 void TetrisScreen::update(StateManager* state_manager)
 {
-
+//	std::cout << "timer ticks: " << drop_timer.getTicks() << std::endl;
+//	std::cout << "drop_time=" << drop_time << std::endl;
+	if(drop_timer.getTicks() >= drop_time && !board.isGameOver())
+	{
+		board.moveDown();
+		drop_timer.start();
+	}
 }
 
 void TetrisScreen::draw(StateManager* state_manager)
 {
+	frr.startFrame();
+
     SDL_FillRect(state_manager->screen, &state_manager->screen->clip_rect,0);
 
     Uint32 gray = SDL_MapRGB(state_manager->screen->format, 35,35,35);
@@ -141,10 +161,10 @@ void TetrisScreen::draw(StateManager* state_manager)
     int xpix=0, ypix=0; //pixels
 
     //for each row
-    for(int y = 0 ; y < board_blocks.size() ; y++)
+    for(Uint32 y = 0 ; y < board_blocks.size() ; y++)
     {
         //for each block in the row.
-        for(int x = 0 ; x < board_blocks[y].size() ; x++)
+        for(Uint32 x = 0 ; x < board_blocks[y].size() ; x++)
         {
             if(getColor(board_blocks[y][x]) < 0)
                 continue;
@@ -160,17 +180,12 @@ void TetrisScreen::draw(StateManager* state_manager)
                 applySurface(xpix, ypix, blocks[getColor(board_blocks[y][x])],
                              state_manager->screen);
             }
-            //positive y is up on the board but down on the screen.
-
         }
     }
 
     //draw the hold piece
     TetrisPiece* temp = board.getHold();
-    //std::cout << temp->getPieceType() << std::endl;
-//    drawPiece(temp, state_manager->screen, blocksize,blocksize);
     std::vector<Point> pblocks;
-
 
     rect.x = blocksize; rect.y = blocksize;
     rect.w = TetrisPiece::BLOCKS_PER_PIECE * blocksize;
@@ -182,10 +197,6 @@ void TetrisScreen::draw(StateManager* state_manager)
 
 
     //draw the current piece
-
-
-
-
     temp = board.getActivePiece();
 
     yblocks = board.getHeight() - temp->getLocation().y - TetrisBoard::NUM_HIDDEN_ROWS;
@@ -195,19 +206,7 @@ void TetrisScreen::draw(StateManager* state_manager)
 
     pblocks.clear();
     pblocks = temp->getBlocks();
-//    for(std::vector<Point>::iterator it = pblocks.begin(), end = pblocks.end();
-//        it != end; ++it)
-//    {
-//        yblocks = board.getHeight() - temp->getLocation().y - it->y
-//            - 1 - TetrisBoard::NUM_HIDDEN_ROWS;
-//        ypix = yblocks * blocksize;
-//
-//        xblocks = BOARD_OFFSETX + temp->getLocation().x + it->x;
-//        xpix = xblocks * blocksize;
-//
-//        applySurface(xpix, ypix, blocks[getColor(temp->getPieceType())],
-//                     state_manager->screen);
-//    }
+
 
     //draw the ghost piece
     temp = board.getGhost();
@@ -218,25 +217,6 @@ void TetrisScreen::draw(StateManager* state_manager)
     xblocks = BOARD_OFFSETX + temp->getLocation().x;
     drawPiece(temp, ghost_surface, 0, ghost_surface->h);
     applySurface(xblocks*blocksize,yblocks*blocksize,ghost_surface,state_manager->screen);
-
-//    SDL_FillRect(ghost_surface, &ghost_surface->clip_rect, ghost_mask);
-//    for(std::vector<Point>::iterator it = pblocks.begin(), end = pblocks.end();
-//    it != end; ++it)
-//    {
-//        ypix = (3 * blocksize ) - (it->y * blocksize);
-//        xpix = it->x * blocksize;
-//
-//        applySurface(xpix, ypix, blocks[getColor(temp->getPieceType())],
-//                     ghost_surface);
-//    }
-//
-//    yblocks = board.getHeight() - temp->getLocation().y - 1 - 3 -
-//        TetrisBoard::NUM_HIDDEN_ROWS;
-//    ypix = yblocks * blocksize;
-//
-//    xblocks = BOARD_OFFSETX + temp->getLocation().x;
-//    xpix = xblocks * blocksize;
-//    applySurface(xpix, ypix, ghost_surface, state_manager->screen);
 
 
     //draw the next pieces
@@ -256,9 +236,25 @@ void TetrisScreen::draw(StateManager* state_manager)
 
 
     //draw the score/lines/level
+    std::stringstream ss;
+    rect.x = blocksize;
+    rect.y = 2*blocksize + 4*blocksize;
+    ss << "Lines: " << board.getLines();
+    font->drawString(ss.str(), state_manager->screen, rect.x,rect.y);
+    ss.str("");
 
+    rect.y += font->getLineSpacing() + font->getHeight();
+    ss << "Score: " << board.getScore();
+    font->drawString(ss.str(),state_manager->screen,rect.x,rect.y);
+    ss.str("");
+
+    rect.y += font->getLineSpacing() + font->getHeight();
+    ss << "Level: " << board.getLevel();
+    font->drawString(ss.str(),state_manager->screen,rect.x,rect.y);
 
     SDL_Flip(state_manager->screen);
+
+    frr.endFrame();
 }
 
 void TetrisScreen::loadBlocks()

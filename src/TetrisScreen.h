@@ -14,6 +14,8 @@
 #include "Timer.h"
 #include "FrameRateRegulator.h"
 
+#include "BitmapFont.h"
+
 class TetrisScreen: public GameState
 {
 public:
@@ -48,6 +50,8 @@ private:
 
     Timer drop_timer; //times drops
     FrameRateRegulator frr; //regulates frame rate
+
+    BitmapFont* font;
 
     SDL_Surface* ghost_surface;
     Uint32 ghost_mask;

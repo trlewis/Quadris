@@ -79,6 +79,7 @@ private:
 
 	bool isOverlap(TetrisPiece* piece);//tests to see if given piece overlaps anything on board
 	bool isWithinBounds(TetrisPiece* piece); //tests to see if the piece is inside the board boundaries
+	bool isOccupied(const int x, const int y);//if the given space on the board is occupied.
 	void placePiece();
 	void newPiece(); // all the stuff that goes with getting a new piece
 	void handleGhost(); // puts ghost in correct position (doesn't rotate)

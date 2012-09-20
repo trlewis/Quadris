@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <cmath>
 
 #include <iostream>
 
@@ -301,10 +302,10 @@ bool TetrisBoard::isOverlap(TetrisPiece* piece)
 bool TetrisBoard::isWithinBounds(TetrisPiece* piece)
 {
     //TODO: erase this stuff!
-    std::cout << "farthest right possible=" << board_width-1 << std::endl;
-    std::cout << "lowest y pos=" << piece->getLocation().y + piece->getBottom() << std::endl;
-    std::cout << "farthest left pos=" << piece->getLocation().x + piece->getLeft() << std::endl;
-    std::cout << "farthest right pos=" << piece->getLocation().x + piece->getRight() << std::endl;
+//    std::cout << "farthest right possible=" << board_width-1 << std::endl;
+//    std::cout << "lowest y pos=" << piece->getLocation().y + piece->getBottom() << std::endl;
+//    std::cout << "farthest left pos=" << piece->getLocation().x + piece->getLeft() << std::endl;
+//    std::cout << "farthest right pos=" << piece->getLocation().x + piece->getRight() << std::endl;
 
     //if it's below the board
     if(piece->getLocation().y + piece->getBottom() < 0)
@@ -321,6 +322,20 @@ bool TetrisBoard::isWithinBounds(TetrisPiece* piece)
     return true;
 }
 
+bool TetrisBoard::isOccupied(const int x, const int y)
+{
+	//check to see if the coords are in bounds first
+	if(x >=0 && x < board_width && y >=0 &&
+		y < board_height - NUM_HIDDEN_ROWS)
+	{
+		if((*my_board[y])[x] != TetrisPiece::EMPTY_PIECE)
+			return true;
+		else
+			return false;
+	}
+	return false;
+}
+
 void TetrisBoard::placePiece()
 {
     std::vector<Point> blocks = my_piece->getBlocks();
@@ -331,6 +346,26 @@ void TetrisBoard::placePiece()
     if(my_piece->getLocation().y + my_piece->getTop() >
        board_height - NUM_HIDDEN_ROWS)
         game_over = true;
+
+    int edges=0;
+    //handle points. the number of points is the number of blocks on the board
+    //touching the piece on an edge squared
+    x = my_piece->getLocation().x;
+    y = my_piece->getLocation().y;
+    for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
+    	i != end; ++i)
+    {
+    	if(isOccupied(i->x-1 + x, i->y + y))
+    		edges++;
+    	if(isOccupied(i->x+1 + x, i->y + y))
+    	    edges++;
+    	if(isOccupied(i->x + x, i->y-1 + y))
+    	    edges++;
+    	if(isOccupied(i->x + x, i->y+1 + y))
+    	    edges++;
+    }
+    std::cout << "num touching edges: " << edges << std::endl;
+    score += edges * edges;
 
     if(!game_over)
     {
@@ -442,7 +477,10 @@ void TetrisBoard::handleLines()
     	stat_triples++;
     else if(numlines == 4)
     	stat_quads++;
+
     //UPDATE SCORE
+    if(numlines > 0)
+    	score += 100 * std::pow((float)2,(float)(numlines-1));
 }
 
 void TetrisBoard::newBag()
