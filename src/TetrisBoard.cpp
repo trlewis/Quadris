@@ -332,6 +332,57 @@ std::string TetrisBoard::getStats()
 	return ss.str();
 }
 
+void TetrisBoard::placePiece()
+{
+    std::vector<Point> blocks = my_piece->getBlocks();
+    int x=0,y=0;
+
+    //TODO: put gameover handling logic here! don't do the stuff below if
+    //gameover or else you'll get a crash or something.
+    if(my_piece->getLocation().y + my_piece->getTop() >
+       board_height - NUM_HIDDEN_ROWS)
+        game_over = true;
+
+    int edges=0;
+    //handle points. the number of points is the number of blocks on the board
+    //touching the piece on an edge squared
+    x = my_piece->getLocation().x;
+    y = my_piece->getLocation().y;
+    for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
+    	i != end; ++i)
+    {
+    	if(isOccupied(i->x-1 + x, i->y + y))
+    		edges++;
+    	if(isOccupied(i->x+1 + x, i->y + y))
+    	    edges++;
+    	if(isOccupied(i->x + x, i->y-1 + y))
+    	    edges++;
+    	if(isOccupied(i->x + x, i->y+1 + y))
+    	    edges++;
+    }
+    std::cout << "num touching edges: " << edges << std::endl;
+    score += edges * edges;
+
+    if(!game_over)
+    {
+        for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
+            i != end ; ++i)
+        {
+            x = my_piece->getLocation().x + i->x;
+            y = my_piece->getLocation().y + i->y;
+
+            (*my_board[y])[x] = my_piece->getPieceType();
+
+            //TODO: update score
+        }
+
+        handleLines();
+        newPiece();
+        my_events.push_back(TetrisBoard::PIECE_PLACE);
+    }
+
+}
+
 bool TetrisBoard::isOverlap(TetrisPiece* piece)
 {
     std::vector<Point> blocks = piece->getBlocks();
@@ -391,56 +442,7 @@ bool TetrisBoard::isOccupied(const int x, const int y)
 	return false;
 }
 
-void TetrisBoard::placePiece()
-{
-    std::vector<Point> blocks = my_piece->getBlocks();
-    int x=0,y=0;
 
-    //TODO: put gameover handling logic here! don't do the stuff below if
-    //gameover or else you'll get a crash or something.
-    if(my_piece->getLocation().y + my_piece->getTop() >
-       board_height - NUM_HIDDEN_ROWS)
-        game_over = true;
-
-    int edges=0;
-    //handle points. the number of points is the number of blocks on the board
-    //touching the piece on an edge squared
-    x = my_piece->getLocation().x;
-    y = my_piece->getLocation().y;
-    for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
-    	i != end; ++i)
-    {
-    	if(isOccupied(i->x-1 + x, i->y + y))
-    		edges++;
-    	if(isOccupied(i->x+1 + x, i->y + y))
-    	    edges++;
-    	if(isOccupied(i->x + x, i->y-1 + y))
-    	    edges++;
-    	if(isOccupied(i->x + x, i->y+1 + y))
-    	    edges++;
-    }
-    std::cout << "num touching edges: " << edges << std::endl;
-    score += edges * edges;
-
-    if(!game_over)
-    {
-        for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
-            i != end ; ++i)
-        {
-            x = my_piece->getLocation().x + i->x;
-            y = my_piece->getLocation().y + i->y;
-
-            (*my_board[y])[x] = my_piece->getPieceType();
-
-            //TODO: update score
-        }
-
-        handleLines();
-        newPiece();
-        my_events.push_back(TetrisBoard::PIECE_PLACE);
-    }
-
-}
 
 void TetrisBoard::newPiece()
 {

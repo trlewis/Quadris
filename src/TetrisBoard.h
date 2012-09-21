@@ -61,6 +61,10 @@ public:
 	bool hasEvents();//whether or not there are events not returned
 	BoardEvent getEvent();//get the top event on the stack
 	std::string getStats();
+
+protected:
+	std::vector<std::vector<TetrisPiece::PieceType>* > my_board; // my_board[y][x]
+	virtual void placePiece();
 private:
 	static const int DEFAULT_BOARD_WIDTH  = 10;
 	static const int DEFAULT_BOARD_HEIGHT = 22;
@@ -71,7 +75,7 @@ private:
 	TetrisPiece* my_ghost;
 	TetrisPiece* my_hold_piece;
 	std::vector<TetrisPiece*> my_bag;
-	std::vector<std::vector<TetrisPiece::PieceType>* > my_board; // my_board[y][x]
+
 	std::vector<BoardEvent> my_events; //gives user info on what's happening (should be a queue...)
 
 	bool held; //to prevent holding before placing a piece
@@ -88,7 +92,6 @@ private:
 	bool isOverlap(TetrisPiece* piece);//tests to see if given piece overlaps anything on board
 	bool isWithinBounds(TetrisPiece* piece); //tests to see if the piece is inside the board boundaries
 	bool isOccupied(const int x, const int y);//if the given space on the board is occupied.
-	void placePiece();
 	void newPiece(); // all the stuff that goes with getting a new piece
 	void handleGhost(); // puts ghost in correct position (doesn't rotate)
 	void handleLines();

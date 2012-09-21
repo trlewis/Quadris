@@ -7,6 +7,7 @@
 #include "HelperFunctions.h"
 
 #include "TetrisBoard.h"
+#include "TreadmillBoard.h"
 
 #include "GameState.h"
 #include "StateManager.h"
@@ -47,7 +48,8 @@ private:
     int blocksize; //in px, used for layout of graphics
     int drop_time, drop_delta;
 
-    TetrisBoard board; //the actual gameplay stuff
+    //TetrisBoard board; //the actual gameplay stuff
+    TreadmillBoard board;
 
     Timer drop_timer; //times drops
     FrameRateRegulator frr; //regulates frame rate
