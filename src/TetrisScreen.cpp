@@ -107,7 +107,7 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
 			case SDLK_a:
 				board.holdPiece(); break;
 			case SDLK_ESCAPE:
-				state_manager->quit(); break;
+				state_manager->popState(); break;
 			case SDLK_SPACE: {
 				std::stringstream abc;
 				abc << drop_timer.getTicks();
