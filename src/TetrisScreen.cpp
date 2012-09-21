@@ -45,11 +45,11 @@ void TetrisScreen::init()
 
 void TetrisScreen::cleanup()
 {
-    while(!blocks.empty())
-    {
-        SDL_FreeSurface(*blocks.end());
-        blocks.pop_back();
-    }
+	for(std::vector<SDL_Surface*>::iterator it = blocks.begin(),
+		end = blocks.end(); it != end; ++it)
+	{
+		SDL_FreeSurface(*it);
+	}
 }
 
 void TetrisScreen::pause()
@@ -106,6 +106,8 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
 			case SDLK_a:
 				board.holdPiece(); break;
 			case SDLK_ESCAPE:
+				state_manager->popState(); break;
+			case SDLK_p:
 				state_manager->popState(); break;
 			case SDLK_SPACE: {
 				std::stringstream abc;

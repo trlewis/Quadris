@@ -1,8 +1,8 @@
 /*
  * MainMenuScreen.cpp
  *
- *  Created on: Sep 19, 2012
- *      Author: econobeing5
+ * Author: Travis Lewis
+ * Created on: 19 Sep 2012
  */
 
 #include <string>
@@ -13,12 +13,15 @@
 #include "MainMenuScreen.h"
 #include "TetrisScreen.h"
 #include "BitmapFont.h"
+#include "FrameRateRegulator.h"
 
 void MainMenuScreen::init()
 {
 	angle = 0;
 	font = new BitmapFont("resources/bluebluewithlayout.png");
+	frr = FrameRateRegulator(30);
 	selected_item = 0;
+
 	menu_items.push_back("Start Game");
 	menu_items.push_back("Credits");
 	menu_items.push_back("Exit");
@@ -85,6 +88,8 @@ void MainMenuScreen::update(StateManager* state_manager)
 
 void MainMenuScreen::draw(StateManager* state_manager)
 {
+	frr.startFrame();
+
 	SDL_FillRect(state_manager->screen, &state_manager->screen->clip_rect,0);
 
 	int x = 10 + (int)(std::abs(bounce_size * std::sin(angle)));
@@ -101,6 +106,8 @@ void MainMenuScreen::draw(StateManager* state_manager)
 	}
 
 	SDL_Flip(state_manager->screen);
+
+	frr.endFrame();
 }
 
 void MainMenuScreen::handleChoice(StateManager* state_manager)

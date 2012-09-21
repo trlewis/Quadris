@@ -1,8 +1,8 @@
 /*
- * ScreenManager.cpp
+ * StateManager.cpp
  *
- *  Created on: Sep 11, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 11 Sep 2012
  */
 
 //TODO: delete this and all cout calls when done testing!
@@ -76,14 +76,20 @@ void StateManager::pushState(GameState* state)
 
 void StateManager::popState()
 {
+	std::cout << "popState() called, states before pop: " << states.size() << std::endl;
 	if(!states.empty())
 	{
 		states.back()->cleanup();
+
+		delete states[states.size()-1];
+
 		states.pop_back();
 	}
 
 	if(!states.empty())
 		states.back()->unpause();
+
+	std::cout <<"finished popState(), states after pop: " << states.size() << std::endl;
 }
 
 void StateManager::handleEvents()

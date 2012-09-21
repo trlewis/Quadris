@@ -1,8 +1,8 @@
 /*
  * TetrisPiece.cpp
  *
- *  Created on: Sep 12, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 12 Sep 2012
  */
 
 //TODO: delete this when done testing!

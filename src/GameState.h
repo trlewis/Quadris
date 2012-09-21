@@ -1,8 +1,8 @@
 /*
- * GameScreen.h
+ * GameState.h
  *
- *  Created on: Sep 11, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 11 Sep 2012
  */
 
 #ifndef GAMESCREEN_H_
@@ -53,7 +53,7 @@ public:
 	{ state_manager->changeState(state); }
 
 	//below line gets rid of the warning. but i'm not sure what it's doing...
-//	virtual ~GameState(){}
+	virtual ~GameState(){}
 protected:
 	bool paused; //!< Whether or not the GameState is paused.
 };

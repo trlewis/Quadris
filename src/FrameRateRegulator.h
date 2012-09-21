@@ -1,8 +1,8 @@
 /*
  * FrameRateRegulator.h
  *
- *  Created on: Sep 6, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 6 Sep 2012
  */
 
 #ifndef FRAMERATEREGULATOR_H_
@@ -10,7 +10,8 @@
 
 #include "Timer.h"
 
-/** \brief A simple Timer for regulating frame rate.
+/**
+ * \brief A simple Timer for regulating frame rate.
  *
  * Simply specify the FPS you would like to use, call startFrame() at the
  * beginning of each game cycle, and endFrame() at the end of each cycle.
@@ -18,10 +19,12 @@
 class FrameRateRegulator: protected Timer
 {
 public:
-	/** \brief Creates a FrameRateRegulator with the default FPS of 60. */
+	/**
+	 * \brief Creates a FrameRateRegulator with the default FPS of 60. */
 	FrameRateRegulator() { init(DEFAULT_FPS);}
 
-	/** \brief Creats a FrameRateRegulator with a given FPS.
+	/**
+	 * \brief Creats a FrameRateRegulator with a given FPS.
 	 * @param fps The FPS to regulate.
 	 */
 	FrameRateRegulator(const int fps) {init(fps);}
@@ -29,10 +32,12 @@ public:
 	/** The default FPS FrameRateRegulator uses. */
     const static int DEFAULT_FPS = 60;
 
-    /** \brief Starts the timer for the current frame. */
+    /**
+     * \brief Starts the timer for the current frame. */
 	void startFrame() { this->start(); }
 
-	/** \brief Ends the current frame.
+	/**
+	 * \brief Ends the current frame.
 	 *
 	 * If this is called before the projected amount of time each frame is
 	 * regulated at passes, SDL_Delay() is called with the remaining amount.
@@ -44,7 +49,8 @@ public:
 		frame++;
 	}
 
-	/** \brief Gets the current frame, increments on every call to
+	/**
+	 * \brief Gets the current frame, increments on every call to
 	 * endFrame(). */
 	int getFrame() { return frame; }
 

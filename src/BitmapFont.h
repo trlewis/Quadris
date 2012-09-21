@@ -10,7 +10,8 @@
 
 #include "SDL/SDL.h"
 
-/** \brief A font for drawing strings of text using bitmap characters.
+/**
+ * \brief A font for drawing strings of text using bitmap characters.
  *
  * BitmapFonts process a source image (of whatever formats SDL_image can
  * handle), and allow users to draw strings of text on screen. This object
@@ -22,12 +23,14 @@ class BitmapFont
 public:
 	// FUNCTIONS
 
-	/** \brief Creates a BitmapFont from the file given.
+	/**
+	 * \brief Creates a BitmapFont from the file given.
 	 * @param filename The path to the source image.
 	 */
 	BitmapFont(std::string filename);
 
-	/** \brief Draws a linear string on screen.
+	/**
+	 * \brief Draws a linear string on screen.
 	 *
 	 * Draws a linear (not multi-line) string of text on screen on the surface
 	 * given and at the location given.
@@ -39,7 +42,8 @@ public:
 	void drawString(std::string text, SDL_Surface* dest,
 			const int x, const int y);
 
-	/** \brief Draws text on a surface in a given area.
+	/**
+	 * \brief Draws text on a surface in a given area.
 	 *
 	 * Draws a string of text on the surface using the bounds given. Does not
 	 * draw what will not fit within the bounds. Breaks lines on spaces or
@@ -55,7 +59,8 @@ public:
 	void drawString(std::string text, SDL_Surface* dest, const int x,
 			const int y,const int width, const int height);
 
-	/** \brief Draws text on a surface in a given area.
+	/**
+	 * \brief Draws text on a surface in a given area.
 	 *
 	 * Draws a string of text on the surface using the bounds given. Does not
 	 * draw what will not fit within the bounds. Breaks lines on spaces or
@@ -66,13 +71,15 @@ public:
 	 */
 	void drawString(std::string text, SDL_Surface* dest, SDL_Rect& box);
 
-	/** \brief Gets the width of a linear string of text.
+	/**
+	 * \brief Gets the width of a linear string of text.
 	 * @param text The line of text to measure.
 	 * @return The number of pixels wide the drawn string would be.
 	 */
 	int getStringWidth(std::string text);
 
-	/** \brief Gets the height of the font.
+	/**
+	 * \brief Gets the height of the font.
 	 * @return The height of the font in pixels, not including line spacing.
 	 */
 	int getHeight();
@@ -82,17 +89,20 @@ public:
 	 */
 	int getLineSpacing();
 
-	/** \brief Gets the spacing between characters.
+	/**
+	 * \brief Gets the spacing between characters.
 	 * @return The number of pixels between characters.
 	 */
 	int getCharSpacing();
 
-	/** \brief Whether or not the source image is keyed.
+	/**
+	 * \brief Whether or not the source image is keyed.
 	 * @return True if the source image is keyed
 	 */
 	bool isKeyed();
 
-	/** \brief Gets the key used with the source image.
+	/**
+	 * \brief Gets the key used with the source image.
 	 * @return RGB=(255,0,255) if the image is not keyed.
 	 */
 	Uint32 getKey();	//returns (255,0,255) if not keyed

@@ -1,9 +1,8 @@
 /*
- * HelperFunctions.cpp
+ * Helperfunctions.cpp
  *
- *  Created on: Sep 6, 2012
- *      Author: econobeing
- * ----------------------------------------------------------------------------
+ * Author: Travis Lewis
+ * Created on: 6 Sep 2012
  */
 
 #include <iostream>

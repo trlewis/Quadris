@@ -1,8 +1,8 @@
 /*
  * TetrisBoard.h
  *
- *  Created on: Sep 12, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 12 Sep 2012
  */
 
 #ifndef TETRISBOARD_H_
@@ -37,10 +37,6 @@ public:
 
 	void holdPiece();
 
-//	void update(); //this is called so the timer can move the piece down
-//	void pause();
-//	void unpause(); //probably don't actually need these, we'll let the screen handle timing
-
 	int getScore();
 	int getLevel();
 	int getLines();
@@ -62,6 +58,9 @@ public:
 	BoardEvent getEvent();//get the top event on the stack
 	std::string getStats();
 
+	//this gets rid of "TetrisBoard has virtual method placePiece but
+	//non-virtual destructor.
+	virtual ~TetrisBoard() {}
 protected:
 	std::vector<std::vector<TetrisPiece::PieceType>* > my_board; // my_board[y][x]
 	virtual void placePiece();

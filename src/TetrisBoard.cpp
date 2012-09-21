@@ -16,6 +16,12 @@
 
 #include "TetrisBoard.h"
 
+//TODO: fix a serious CPU killer that occurs when a block that would be above the
+//		top of the board (above the top two non-visible rows) is attempted to be
+//		placed.
+
+//TODO: clean up stray pointers. possibly convert some of the pointers to...non pointers
+
 
 TetrisBoard::TetrisBoard()
 {
@@ -29,6 +35,9 @@ TetrisBoard::TetrisBoard(const int width, const int height)
 
 void TetrisBoard::moveLeft()
 {
+	if(game_over)
+		return;
+
     TetrisPiece* test = my_piece->moveLeft();
     if(isWithinBounds(test) && !isOverlap(test))
     {
@@ -40,6 +49,9 @@ void TetrisBoard::moveLeft()
 
 void TetrisBoard::moveRight()
 {
+	if(game_over)
+		return;
+
     TetrisPiece* test = my_piece->moveRight();
     if(isWithinBounds(test) && !isOverlap(test))
     {
@@ -51,6 +63,9 @@ void TetrisBoard::moveRight()
 
 void TetrisBoard::moveDown()
 {
+	if(game_over)
+		return;
+
     TetrisPiece* test = my_piece->moveDown();
     if(!isWithinBounds(test) || isOverlap(test))
     {
@@ -65,6 +80,9 @@ void TetrisBoard::moveDown()
 
 void TetrisBoard::hardDrop()
 {
+	if(game_over)
+		return;
+
     int y = my_piece->getLocation().y;
     do
     {
@@ -76,6 +94,9 @@ void TetrisBoard::hardDrop()
 
 void TetrisBoard::rotateCCW()
 {
+	if(game_over)
+		return;
+
     TetrisPiece* test = my_piece->rotateCCW();
     bool can_rotate = false;
 
@@ -103,6 +124,9 @@ void TetrisBoard::rotateCCW()
 
 void TetrisBoard::rotateCW()
 {
+	if(game_over)
+		return;
+
     TetrisPiece* test = my_piece->rotateCW();
 
     bool can_rotate = false;
@@ -131,6 +155,9 @@ void TetrisBoard::rotateCW()
 
 void TetrisBoard::holdPiece()
 {
+	if(game_over)
+		return;
+
     if(!held)
     {
         if(my_hold_piece->getPieceType() != TetrisPiece::EMPTY_PIECE)
@@ -163,7 +190,6 @@ std::vector<std::vector<TetrisPiece::PieceType> > TetrisBoard::getBoard()
 {
     std::vector<std::vector<TetrisPiece::PieceType> > copy;
     copy.clear();
-
 
     //for each row
     for(std::vector<std::vector<TetrisPiece::PieceType>* >::iterator y
@@ -300,6 +326,9 @@ std::string TetrisBoard::getStats()
 
 void TetrisBoard::placePiece()
 {
+	if(game_over)
+		return;
+
     std::vector<Point> blocks = my_piece->getBlocks();
     int x=0,y=0;
 
@@ -406,6 +435,9 @@ bool TetrisBoard::isOccupied(const int x, const int y)
 
 void TetrisBoard::newPiece()
 {
+	if(game_over)
+		return;
+
     held = false;
     newBag();
 
@@ -420,6 +452,9 @@ void TetrisBoard::newPiece()
 
 void TetrisBoard::handleGhost()
 {
+	if(game_over)
+		return;
+
     my_ghost = my_piece->getCopy();
     while(my_ghost->getLocation().y + my_ghost->getTop() >= board_height)
         my_ghost = my_ghost->moveDown();
@@ -432,6 +467,9 @@ void TetrisBoard::handleGhost()
 
 void TetrisBoard::handleLines()
 {
+	if(game_over)
+		return;
+
     bool found = false;
     int numlines = 0; //number of filled lines
     int blockcount = 0;
