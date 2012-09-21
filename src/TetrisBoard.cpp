@@ -1,8 +1,8 @@
 /*
  * TetrisBoard.cpp
  *
- *  Created on: Sep 12, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 12 Sep 2012
  */
 
 #include <string>
@@ -98,23 +98,6 @@ void TetrisBoard::rotateCCW()
     	my_events.push_back(TetrisBoard::ROTATE);
     }
 
-//    if(isWithinBounds(test))
-//    {
-//        if(isOverlap(test))
-//        {
-//            test = test->moveUp();
-//            if(!isOverlap(test) && isWithinBounds(test))
-//            {
-//            	my_piece = test;
-//            	stat_ccw++;
-//            }
-//        }
-//        else
-//        {
-//        	my_piece = test;
-//        	stat_ccw++;
-//        }
-//    }
     handleGhost();
 }
 
@@ -143,23 +126,6 @@ void TetrisBoard::rotateCW()
     	my_events.push_back(TetrisBoard::ROTATE);
     }
 
-//    if(isWithinBounds(test))
-//    {
-//        if(isOverlap(test))
-//        {
-//            test = test->moveUp();
-//            if(!isOverlap(test) && isWithinBounds(test))
-//            {
-//            	my_piece = test;
-//            	stat_cw++;
-//            }
-//        }
-//        else
-//        {
-//        	my_piece = test;
-//        	stat_cw++;
-//        }
-//    }
     handleGhost();
 }
 
@@ -343,9 +309,9 @@ void TetrisBoard::placePiece()
        board_height - NUM_HIDDEN_ROWS)
         game_over = true;
 
-    int edges=0;
     //handle points. the number of points is the number of blocks on the board
     //touching the piece on an edge squared
+    int edges=0;
     x = my_piece->getLocation().x;
     y = my_piece->getLocation().y;
     for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
@@ -360,7 +326,7 @@ void TetrisBoard::placePiece()
     	if(isOccupied(i->x + x, i->y+1 + y))
     	    edges++;
     }
-    std::cout << "num touching edges: " << edges << std::endl;
+//    std::cout << "num touching edges: " << edges << std::endl;
     score += edges * edges;
 
     if(!game_over)
@@ -407,12 +373,6 @@ bool TetrisBoard::isOverlap(TetrisPiece* piece)
 
 bool TetrisBoard::isWithinBounds(TetrisPiece* piece)
 {
-    //TODO: erase this stuff!
-//    std::cout << "farthest right possible=" << board_width-1 << std::endl;
-//    std::cout << "lowest y pos=" << piece->getLocation().y + piece->getBottom() << std::endl;
-//    std::cout << "farthest left pos=" << piece->getLocation().x + piece->getLeft() << std::endl;
-//    std::cout << "farthest right pos=" << piece->getLocation().x + piece->getRight() << std::endl;
-
     //if it's below the board
     if(piece->getLocation().y + piece->getBottom() < 0)
         return false;
@@ -455,24 +415,11 @@ void TetrisBoard::newPiece()
     my_piece = my_piece->setLocation(board_width/2, board_height-1);
     stat_pieces++;
 
-    //my_ghost = new TetrisPiece(my_piece->getPieceType());
     handleGhost();
 }
 
 void TetrisBoard::handleGhost()
 {
-//    my_ghost = my_piece->setLocation(my_piece->getLocation().x,
-//                                     0-my_piece->getBottom());
-//
-//    while(isOverlap(my_ghost))
-//        my_ghost = my_ghost->moveUp();
-
-//    my_ghost = my_piece->getCopy();
-//    while(!isOverlap(my_ghost) || !isWithinBounds(my_ghost))
-//        my_ghost = my_ghost->moveDown();
-//
-//    my_ghost = my_ghost->moveUp();
-
     my_ghost = my_piece->getCopy();
     while(my_ghost->getLocation().y + my_ghost->getTop() >= board_height)
         my_ghost = my_ghost->moveDown();
@@ -524,7 +471,6 @@ void TetrisBoard::handleLines()
             }
         }
     } while(found);
-
     lines += numlines;
 
     //update level
@@ -584,8 +530,7 @@ void TetrisBoard::newBag()
         {
             my_bag.push_back(*i);
         }
-        // get rid of temp bag. NOTE: this may erase what was just put into
-        // my_bag so watch out
+        // get rid of temp bag.
         new_bag.clear();
     }
 }

@@ -1,10 +1,10 @@
-/**
- * Created by: Travis Lewis
- * Date: 18 Sep 2012
+/*
+ * TetrisScreen.cpp
  *
+ * Author: Travis Lewis
+ * Created on: 18 Sep 2012
  */
 
-#include <iostream> //TODO: delete this when done!
 #include <vector>
 #include <sstream>
 
@@ -21,8 +21,7 @@
 void TetrisScreen::init()
 {
     blocks.clear();
-    //board = TetrisBoard();
-    board = TreadmillBoard();
+    board = TreadmillBoard();//board = TetrisBoard();
 
     drop_time = DEFAULT_DROP_TIME;
     drop_delta = DEFAULT_DROP_DIFF;
@@ -147,8 +146,6 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
 
 void TetrisScreen::update(StateManager* state_manager)
 {
-//	std::cout << "timer ticks: " << drop_timer.getTicks() << std::endl;
-//	std::cout << "drop_time=" << drop_time << std::endl;
 	if(drop_timer.getTicks() >= drop_time && !board.isGameOver())
 	{
 		board.moveDown();
@@ -251,11 +248,6 @@ void TetrisScreen::draw(StateManager* state_manager)
         drawPiece(bag.at(i),state_manager->screen,xblocks*blocksize,yblocks*blocksize);
     }
 
-    //TODO: DELETE THIS
-//    SDL_Rect frect; frect.x = 350; frect.y = 300;
-//    frect.w = 200; frect.h = 400;
-//    std::string str = "Test string that i'm writing so that i can see if transparency works without generating another image i'm thinking that it will but we'll see so yeah here goes.";
-//    font->drawString(str,state_manager->screen,frect);
 
     //draw the score/lines/level
     std::stringstream ss;
@@ -295,17 +287,6 @@ void TetrisScreen::draw(StateManager* state_manager)
 
     	for(unsigned int i = 0 ; i < my_toasts.size() ; i++)
     		my_toasts[i].drawToast(state_manager->screen);
-
-//		for(std::vector<Toast>::iterator i = my_toasts.begin(),
-//			end = my_toasts.end(); i != end; ++i)
-//		{
-//			if(i->isDone())
-//			{
-//				my_toasts.erase(i--);
-//				continue;
-//			}
-//			i->drawToast(state_manager->screen);
-//		}
     }
 
     SDL_Flip(state_manager->screen);
@@ -315,8 +296,6 @@ void TetrisScreen::draw(StateManager* state_manager)
 
 void TetrisScreen::loadBlocks()
 {
-    //std::stringstream ss;
-
     blocks.push_back(loadImage("resources/block_cyan.png")); // I
     blocks.push_back(loadImage("resources/block_yellow.png")); // O
     blocks.push_back(loadImage("resources/block_purple.png")); // T
@@ -347,8 +326,6 @@ int TetrisScreen::getColor(TetrisPiece::PieceType type)
             return LBLOCK; break;
         default:
         	break;
-//        default:
-//            return GRAYBLOCK; break;
     }
     return -1;
 }

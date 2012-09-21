@@ -10,9 +10,16 @@
 
 #include "TetrisBoard.h"
 
+/** \brief A variant of the classic TetrisBoard style gameplay.
+ *
+ * This is a simple variant where the only change is that after each piece is
+ * placed, the entire board is shifted one space to the left, and the left-most
+ * column is wrapped around to become the right-most column.
+ */
 class TreadmillBoard: public TetrisBoard
 {
-public:
+protected:
+	//* <inheritdoc> */
 	void placePiece()
 	{
 		TetrisBoard::placePiece();

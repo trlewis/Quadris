@@ -1,8 +1,8 @@
 /*
- * TetrisBlock.h
+ * TetrisPiece.h
  *
- *  Created on: Sep 11, 2012
- *      Author: econobeing
+ * Author: Travis Lewis
+ * Created on: 11 Sep 2012
  */
 
 #ifndef TETRISPIECE_H_
@@ -10,29 +10,27 @@
 
 #include <vector>
 
-/**
- * \brief A simple point.
+/** \brief A simple point.
  *
  * Holds X and Y values
  */
 struct Point
 {
-	int x; ///< X coordinate
-	int y; ///< Y coordinate
+	int x; //!< X coordinate
+	int y; //!< Y coordinate
 };
 
-/**
- * \brief Holds information about a Tetris Piece.
+/** \brief Holds information about a Tetris Piece.
  *
  * Does not hold or perform operations having to do with a game of Tetris.
  * This object only holds a generic information, the board or game that
  * uses this object needs to handle all of the other information/operations.
+ * TetrisPiece objects are immutable.
  */
 class TetrisPiece
 {
 public:
-	/**
-	 * The type of the piece. Can (and should) be used by the board / game to
+	/** The type of the piece. Can (and should) be used by the board / game to
 	 * determine which image to draw for the blocks that make up the piece.
 	 * EMPTY_PIECE should never be used as a usable piece.
 	 */
@@ -44,9 +42,7 @@ public:
 	/** The number of blocks in each piece. */
 	static const int BLOCKS_PER_PIECE = 4;
 
-	/**
-	 * \brief generic constructor, give it a piece type and get out a piece.
-	 *
+	/** \brief generic constructor, give it a piece type and get out a piece.
 	 * @param type The type of piece to create.
 	 * @return The completed piece.
 	 */
@@ -54,125 +50,81 @@ public:
 
 	//TODO: redo rotation functions so they follow tetris guidelines
 
-	/**
-	 * \brief Creates a new piece representing the current piece rotated CCW
+	/** \brief Creates a new piece representing the current piece rotated CCW
 	 * by 90 degrees.
-	 *
 	 * @return A pointer to the rotated piece.
 	 */
 	TetrisPiece* rotateCCW();
 
-	/**
-	 * \brief Creates a new piece representing the current piece rotated CW
+	/** \brief Creates a new piece representing the current piece rotated CW
 	 * by 90 degrees.
-	 *
 	 * @return A pointer to the rotated piece.
 	 */
 	TetrisPiece* rotateCW();
 
-	/**
-	 * \brief Creates a new piece representing the current piece moved left
+	/** \brief Creates a new piece representing the current piece moved left
 	 * one unit.
-	 *
 	 * @return A pointer to the newly translated piece.
 	 */
 	TetrisPiece* moveLeft();
 
-	/**
-	 * \brief Creates a new piece representing the current piece moved right
+	/** \brief Creates a new piece representing the current piece moved right
 	 * one unit.
-	 *
 	 * @return A pointer to the newly translated piece.
 	 */
 	TetrisPiece* moveRight();
 
-	/**
-	 * \brief Creates a new piece representing the current piece moved down
+	/** \brief Creates a new piece representing the current piece moved down
 	 * one unit.
-	 *
 	 * @return A pointer to the newly translated piece.
 	 */
 	TetrisPiece* moveDown();
 
-	/**
-	 * \brief Creates a new piece representing the current piece moved up
+	/** \brief Creates a new piece representing the current piece moved up
 	 * one unit.
-	 *
 	 * @return A pointer to the newly translated piece.
 	 */
 	TetrisPiece* moveUp();
 
-	//reposition should (forseeabley) only be used by the board to move the
-	//piece to the top of the board.
-
-	/**
-	 * \brief Creates a new piece representing the current piece moved
+	/** \brief Creates a new piece representing the current piece moved
 	 * to the given location.
-	 *
 	 * @param x The X position to place the translated piece.
 	 * @param y The Y position to place the translated piece.
 	 * @return A pointer to newly translated piece.
 	 */
 	TetrisPiece* setLocation(const int x, const int y);
 
-	/**
-	 * \brief Returns a copy of the piece. Useful for read-only operations.
-	 */
+	/** \brief Returns a copy of the piece. Useful for read-only operations. */
 	TetrisPiece* getCopy();
 
-	/**
-	 * \brief Gets the current location of the piece. (read only)
-	 *
+	/** \brief Gets the current location of the piece. (read only)
 	 * @return A copy of the piece's location.
 	 */
 	Point getLocation();
 
-	/**
-	 * \brief Gets a copy of the positions of the blocks.
-	 *
-	 * @return A vector which contains copies of
-	 * the current positions of the blocks.
+	/** \brief Gets a copy of the positions of the blocks.
+	 * @return A vector which contains copies of the current positions of
+	 * the blocks.
 	 */
 	std::vector<Point> getBlocks();
 
-	/**
-	 * \brief Gets the type of the current piece.
-	 *
-	 * @return The type of the current piece.
-	 */
+	/** \brief Gets the type of the current piece. */
 	PieceType getPieceType();
 
-	/**
-	 * \brief Gets the farthest left block's X position.
-	 *
-	 * @return The lowest X value that the piece's blocks have.
-	 */
+	/** \brief Gets the farthest left block's X position. */
 	int getLeft();
 
-	/**
-	 * \brief Gets the farthest right block's X position.
-	 *
-	 * @return The highest X value that the piece's blocks have.
-	 */
+	/** \brief Gets the farthest right block's X position. */
 	int getRight();
 
-	/**
-	 * \brief Gets the lowest block's Y position.
-	 *
-	 * @return The lowest Y value that the piece's blocks have.
-	 */
+	/** \brief Gets the lowest block's Y position. */
 	int getBottom();
 
-	/**
-	 * \brief Gets the highest block's Y position.
-	 *
-	 * @return The highest Y value that the piece's blocks have.
-	 */
+	/** \brief Gets the highest block's Y position. */
 	int getTop();
 
-	// this will mainly be used for testing, and should be deleted when done
-	/**
-	 * \brief Gets a string representation of the current piece.
+	// this will probably mainly be used for testing
+	/** \brief Gets a string representation of the current piece.
 	 *
 	 * The returned string is constructed to be viewed visually, such as
 	 * on the console. It isn't really useful for coding purposes.
@@ -180,20 +132,17 @@ public:
 	 */
 	std::string toString();
 private:
-	PieceType my_type; ///< The current piece type
+	PieceType my_type; //!< The current piece type
 
-	/**
-	 * Contains information about where the blocks that make up the piece are
+	/** Contains information about where the blocks that make up the piece are
 	 * located relative to the 4x4 grid, with it's origin at the bottom left.
 	 */
 	std::vector<Point> my_blocks;
 
-	/// Where the lower left of the 4x4 grid of the piece is.
+	/** Where the lower left of the 4x4 grid of the piece is. */
 	Point my_location;
 
-	//pieces are immutable so this private constructor handles rotation
-	/**
-	 * Used by internal functions to create a new piece after rotation or
+	/** Used by internal functions to create a new piece after rotation or
 	 * translation.
 	 * @param blocks The blocks (positions of) that will make up the new piece.
 	 * @param type The piece type.
@@ -203,15 +152,13 @@ private:
 	TetrisPiece(std::vector<Point> blocks, PieceType type, const int x,
 			const int y);
 
-	/**
-	 * Helper method to determine if the current piece is a horizontally
+	/** Helper method to determine if the current piece is a horizontally
 	 * oriented I piece.
 	 * @return True if the current piece is a horizontally oriented I piece.
 	 */
 	bool isHorizI();
 
-	/**
-	 * \brief Creates a new point at the location given.
+	/** \brief Creates a new point at the location given.
 	 *
 	 * A helper method to create a new Point object in one line. Useful to
 	 * get rid of warnings from the compiler.
