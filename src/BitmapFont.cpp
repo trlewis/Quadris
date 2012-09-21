@@ -24,6 +24,8 @@ BitmapFont::BitmapFont(std::string filename)
 	if(source_img == NULL)
 		std::cout << "bitmap source file '" << filename << "' not found\n";
 
+	color_key = SDL_MapRGB(source_img->format, 255, 0, 255);
+
 	processImage();
 }
 
@@ -121,14 +123,14 @@ int BitmapFont::getStringWidth(std::string text)
 int BitmapFont::getHeight() { return source_img->h; }
 int BitmapFont::getLineSpacing() { return line_space; }
 int BitmapFont::getCharSpacing() { return char_space; }
-
+bool BitmapFont::isKeyed() { return keyed; }
+Uint32 BitmapFont::getKey() { return color_key; }
 
 void BitmapFont::processImage()
 {
 	Uint32 delim_color = getPixel32(source_img, 0, 0);
-
-	int left = START_PIXEL;
 	Uint32 color;
+	int left = START_PIXEL;
 	int count = 0;	// used for accessing letters[]
 
 	for(int x = START_PIXEL ; x < source_img->w ; x++)
@@ -152,6 +154,7 @@ void BitmapFont::processImage()
 	Uint8 red = 0;
 	Uint8 green = 0;
 	Uint8 blue = 0;
+
 	color = getPixel32(source_img, 0, 1);
 	SDL_GetRGB(color, source_img->format, &red, &green, &blue);
 
@@ -160,8 +163,9 @@ void BitmapFont::processImage()
 
 	if(blue > 0)
 	{
-		color = getPixel32(source_img, 0, 2);
-		SDL_SetColorKey(source_img, SDL_SRCCOLORKEY, color);
+		keyed = true;
+		color_key = getPixel32(source_img, 0, 2);
+		SDL_SetColorKey(source_img, SDL_SRCCOLORKEY, color_key);
 	}
 }
 

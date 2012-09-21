@@ -29,7 +29,8 @@ public:
 	int getHeight();        //height of the font in px
 	int getLineSpacing();   //px between lines (not including font size)
 	int getCharSpacing();   //px between characters.
-
+	bool isKeyed();
+	Uint32 getKey();	//returns (255,0,255) if not keyed
 private:
 	// FIELDS
 	static const int START_PIXEL = 3;
@@ -41,6 +42,8 @@ private:
 
 	int line_space;		// pixels between lines
 	int char_space;		// pixels between characters
+	bool keyed;
+	Uint32 color_key;
 	// we don't need a field for word spacing since a space is actually       s
 	// a character, which has its width defined in the source image.
 

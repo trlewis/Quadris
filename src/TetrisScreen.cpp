@@ -12,6 +12,7 @@
 
 #include "HelperFunctions.h"
 #include "BitmapFont.h"
+#include "Toast.h"
 
 #include "TetrisScreen.h"
 
@@ -31,29 +32,15 @@ void TetrisScreen::init()
     loadBlocks();
     blocksize = blocks.at(0)->w; //get the block size from one of the blocks...
 
-    Uint32 rmask ,gmask, bmask, amask;
-    #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-        rmask = 0xff000000;
-        gmask = 0x00ff0000;
-        bmask = 0x0000ff00;
-        amask = 0x00000000;
-    #else
-        rmask = 0x000000ff;
-        gmask = 0x0000ff00;
-        bmask = 0x00ff0000;
-        amask = 0x00000000;
-    #endif
-    //^use 0 for the amask so the entire ghost surface will be alpha..tized
-
     ghost_surface = SDL_CreateRGBSurface(SDL_SRCALPHA, 4*blocksize,
-        4*blocksize, 32, rmask, gmask, bmask, amask);
-    SDL_SetAlpha(ghost_surface, SDL_SRCALPHA, SDL_ALPHA_OPAQUE/2);
+    	4*blocksize, 32,0,0,0,0);
+
+    SDL_SetAlpha(ghost_surface, SDL_SRCALPHA, 128);
     ghost_mask = SDL_MapRGB(ghost_surface->format, 255, 0 , 255);
     SDL_SetColorKey(ghost_surface, SDL_SRCCOLORKEY, ghost_mask);
 
 
     font = new BitmapFont("resources/bluebluewithlayout.png");
-    //start timer at the end here.
 }
 
 void TetrisScreen::cleanup()
@@ -80,40 +67,8 @@ void TetrisScreen::unpause()
 void TetrisScreen::handleEvents(StateManager* state_manager)
 {
     SDL_Event e;
-    if(!board.isGameOver())
-    {
-        while(SDL_PollEvent(&e))
-        {
-            if(e.type == SDL_KEYDOWN)
-            {
-                switch(e.key.keysym.sym)
-                {
-                    case SDLK_LEFT:
-                        board.moveLeft(); break;
-                    case SDLK_RIGHT:
-                        board.moveRight(); break;
-                    case SDLK_DOWN:
-                        board.moveDown(); break;
-                    case SDLK_UP:
-                        board.hardDrop(); break;
-                    case SDLK_z:
-                        board.rotateCCW(); break;
-                    case SDLK_x:
-                        board.rotateCW(); break;
-                    case SDLK_a:
-                        board.holdPiece(); break;
-                    case SDLK_ESCAPE:
-                        state_manager->quit(); break;
-                    default:
-                        break;
-                }
-            }
-            //TODO: delete this!
-//            std::cout << board.toString() << "\n\n";
-//            std::cout << board.getStats() << "\n";
-        }
-    }
-    else
+
+    if(board.isGameOver())
     {
     	while(SDL_PollEvent(&e))
     	{
@@ -124,6 +79,65 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
     		}
     		else if(e.type == SDL_QUIT)
     			state_manager->quit();
+    	}
+    	return;
+    }
+
+	while(SDL_PollEvent(&e))
+	{
+		if(e.type == SDL_KEYDOWN)
+		{
+			switch(e.key.keysym.sym)
+			{
+			case SDLK_LEFT:
+				board.moveLeft(); break;
+			case SDLK_RIGHT:
+				board.moveRight(); break;
+			case SDLK_DOWN:
+				board.moveDown(); break;
+			case SDLK_UP:
+				board.hardDrop(); break;
+			case SDLK_z:
+				board.rotateCCW(); break;
+			case SDLK_x:
+				board.rotateCW(); break;
+			case SDLK_a:
+				board.holdPiece(); break;
+			case SDLK_ESCAPE:
+				state_manager->quit(); break;
+			case SDLK_SPACE: {
+				std::stringstream abc;
+				abc << drop_timer.getTicks();
+				pushToast(abc.str());
+				break; }
+			default:
+				break;
+			}
+		}
+	}
+
+    //handle board events
+    while(board.hasEvents())
+    {
+    	TetrisBoard::BoardEvent be = board.getEvent();
+    	switch(be)
+    	{
+    	case TetrisBoard::DOUBLE_LINE:
+    		pushToast("Double Line"); break;
+    	case TetrisBoard::TRIPLE_LINE:
+    		pushToast("TRIPLE LINE"); break;
+    	case TetrisBoard::QUAD_LINE:
+    		pushToast("QUAD LINE!!"); break;
+    	case TetrisBoard::LEVEL_UP: {
+    		if(board.getLevel() < 15)
+    			drop_time -= drop_delta;
+    		pushToast("Level Up");
+    		Toast* t;
+    		t = &my_toasts.at(my_toasts.size()-1);
+    		t->setLocation(t->getX(), t->getY() - (font->getHeight() * 2));
+    		break; }
+    	default:
+    		break;
     	}
     }
 }
@@ -161,10 +175,10 @@ void TetrisScreen::draw(StateManager* state_manager)
     int xpix=0, ypix=0; //pixels
 
     //for each row
-    for(Uint32 y = 0 ; y < board_blocks.size() ; y++)
+    for(unsigned int y = 0 ; y < board_blocks.size() ; y++)
     {
         //for each block in the row.
-        for(Uint32 x = 0 ; x < board_blocks[y].size() ; x++)
+        for(unsigned int x = 0 ; x < board_blocks[y].size() ; x++)
         {
             if(getColor(board_blocks[y][x]) < 0)
                 continue;
@@ -234,6 +248,11 @@ void TetrisScreen::draw(StateManager* state_manager)
         drawPiece(bag.at(i),state_manager->screen,xblocks*blocksize,yblocks*blocksize);
     }
 
+    //TODO: DELETE THIS
+//    SDL_Rect frect; frect.x = 350; frect.y = 300;
+//    frect.w = 200; frect.h = 400;
+//    std::string str = "Test string that i'm writing so that i can see if transparency works without generating another image i'm thinking that it will but we'll see so yeah here goes.";
+//    font->drawString(str,state_manager->screen,frect);
 
     //draw the score/lines/level
     std::stringstream ss;
@@ -252,6 +271,40 @@ void TetrisScreen::draw(StateManager* state_manager)
     ss << "Level: " << board.getLevel();
     font->drawString(ss.str(),state_manager->screen,rect.x,rect.y);
 
+    //draw toasts
+    if(my_toasts.size() > 0)
+    {
+    	bool isdead;
+    	do{
+    		isdead = false;
+    		for(unsigned int i = 0 ; i < my_toasts.size() ; i++)
+    		{
+    			if(my_toasts[i].isDone())
+    			{
+    				isdead = true;
+    				std::vector<Toast>::iterator it = my_toasts.begin();
+    				it += i;
+    				my_toasts.erase(it);
+    				break;
+    			}
+    		}
+    	} while(isdead);
+
+    	for(unsigned int i = 0 ; i < my_toasts.size() ; i++)
+    		my_toasts[i].drawToast(state_manager->screen);
+
+//		for(std::vector<Toast>::iterator i = my_toasts.begin(),
+//			end = my_toasts.end(); i != end; ++i)
+//		{
+//			if(i->isDone())
+//			{
+//				my_toasts.erase(i--);
+//				continue;
+//			}
+//			i->drawToast(state_manager->screen);
+//		}
+    }
+
     SDL_Flip(state_manager->screen);
 
     frr.endFrame();
@@ -259,7 +312,7 @@ void TetrisScreen::draw(StateManager* state_manager)
 
 void TetrisScreen::loadBlocks()
 {
-    std::stringstream ss;
+    //std::stringstream ss;
 
     blocks.push_back(loadImage("resources/block_cyan.png")); // I
     blocks.push_back(loadImage("resources/block_yellow.png")); // O
@@ -289,6 +342,8 @@ int TetrisScreen::getColor(TetrisPiece::PieceType type)
             return JBLOCK; break;
         case TetrisPiece::L:
             return LBLOCK; break;
+        default:
+        	break;
 //        default:
 //            return GRAYBLOCK; break;
     }
@@ -306,7 +361,6 @@ void TetrisScreen::drawPiece(TetrisPiece* piece, SDL_Surface* dest,
     for(std::vector<Point>::iterator it = pblocks.begin(),
         end = pblocks.end() ; it != end ; ++it)
     {
-        //yblocks = 3 - it->y;
         yblocks = it->y + 1;
         ypix = offy - (yblocks * blocksize);
 
@@ -315,5 +369,17 @@ void TetrisScreen::drawPiece(TetrisPiece* piece, SDL_Surface* dest,
 
         applySurface(xpix, ypix, blocks[color], dest);
     }
+}
+
+void TetrisScreen::pushToast(std::string message)
+{
+	Toast t(font, message, 0, 300, 6);
+
+	int boardleft = BOARD_OFFSETX * blocksize;
+	int boardright = boardleft + (board.getWidth() * blocksize);
+	int mwidth = font->getStringWidth(message);
+	t.setLocation(((boardleft + boardright)/2) - (mwidth/2),t.getY());
+	t.setMovement(0,-1.5);
+	my_toasts.push_back(t);
 }
 

@@ -15,6 +15,7 @@
 #include "FrameRateRegulator.h"
 
 #include "BitmapFont.h"
+#include "Toast.h"
 
 class TetrisScreen: public GameState
 {
@@ -30,7 +31,7 @@ public:
     void draw(StateManager* state_manager);
 private:
 	static const int DEFAULT_DROP_TIME    = 1000;
-	static const int DEFAULT_DROP_DIFF    = 45;
+	static const int DEFAULT_DROP_DIFF    = 90;//45;
 
 	static const int IBLOCK=0, OBLOCK=1, TBLOCK=2, SBLOCK=3, ZBLOCK=4,
         JBLOCK=5, LBLOCK=6, GRAYBLOCK=7;
@@ -56,6 +57,8 @@ private:
     SDL_Surface* ghost_surface;
     Uint32 ghost_mask;
 
+    std::vector<Toast> my_toasts;
+
     void loadBlocks();
     //colors:
     //I=cyan, O=yellow, T=purple, S=green, Z=red, J=blue, L=orange
@@ -65,6 +68,8 @@ private:
     //area
     void drawPiece(TetrisPiece* piece, SDL_Surface* dest,
         const int offx, const int offy);
+
+    void pushToast(std::string message);
 };
 
 #endif

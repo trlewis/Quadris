@@ -58,7 +58,7 @@ public:
 	std::vector<TetrisPiece*> getBag();
 
 	std::string toString();
-	bool isEvents();//whether or not there are events not returned
+	bool hasEvents();//whether or not there are events not returned
 	BoardEvent getEvent();//get the top event on the stack
 	std::string getStats();
 private:

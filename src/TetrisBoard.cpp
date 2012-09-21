@@ -261,7 +261,7 @@ std::string TetrisBoard::toString()
             //if a block in the current piece is in this position
             if(!found)
             {
-                for(int i = 0 ; i < pieceblocks.size() ; i++)
+                for(unsigned int i = 0 ; i < pieceblocks.size() ; i++)
                 {
                     if(pieceblocks.at(i).y + my_piece->getLocation().y < board_height)
                     {
@@ -279,7 +279,7 @@ std::string TetrisBoard::toString()
             //if a block in the ghost is in this position
             if(!found)
             {
-                for(int i = 0 ; i < ghostblocks.size() ; i++)
+                for(unsigned int i = 0 ; i < ghostblocks.size() ; i++)
                 {
                     if(ghostblocks.at(i).x + my_ghost->getLocation().x == x &&
                        ghostblocks.at(i).y + my_ghost->getLocation().y == y)
@@ -300,7 +300,7 @@ std::string TetrisBoard::toString()
     return ss.str();
 }
 
-bool TetrisBoard::isEvents() { return my_events.size() == 0; }
+bool TetrisBoard::hasEvents() { return my_events.size() != 0; }
 
 TetrisBoard::BoardEvent TetrisBoard::getEvent()
 {
