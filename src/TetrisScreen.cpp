@@ -76,10 +76,12 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
     		if(e.type == SDL_KEYDOWN)
     		{
     			if(e.key.keysym.sym == SDLK_ESCAPE)
-    				state_manager->quit();
+    				//state_manager->quit();
+    				state_manager->popState();
     		}
     		else if(e.type == SDL_QUIT)
-    			state_manager->quit();
+    			//state_manager->quit();
+    			state_manager->popState();
     	}
     	return;
     }
