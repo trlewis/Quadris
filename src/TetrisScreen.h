@@ -54,6 +54,9 @@ private:
     int blocksize; //in px, used for layout of graphics
     int drop_time, drop_delta;
 
+    //TODO: figure out why you can't just do (TetrisBoard)TreadmillBoard()
+    //		in the cpp file. but instead have to declare board as a
+    //		TetrisBoard or TreadmillBoard in the header to get what you want.
     //TetrisBoard board; //the actual gameplay stuff
     TreadmillBoard board;
 

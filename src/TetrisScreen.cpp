@@ -15,13 +15,16 @@
 #include "Toast.h"
 
 #include "TetrisScreen.h"
+#include "TetrisBoard.h"
 #include "TreadmillBoard.h"
 
 
 void TetrisScreen::init()
 {
     blocks.clear();
-    board = TreadmillBoard();//board = TetrisBoard();
+    //board = (TetrisBoard)TreadmillBoard();
+    board = TreadmillBoard();
+    //board = TetrisBoard();
 
     drop_time = DEFAULT_DROP_TIME;
     drop_delta = DEFAULT_DROP_DIFF;
