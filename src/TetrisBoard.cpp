@@ -23,13 +23,19 @@
 //TODO: clean up stray pointers. possibly convert some of the pointers to...non pointers
 
 
-TetrisBoard::TetrisBoard()
+TetrisBoard::TetrisBoard() : my_piece(TetrisPiece::EMPTY_PIECE), my_ghost(TetrisPiece::EMPTY_PIECE),
+	my_hold_piece(TetrisPiece::EMPTY_PIECE)
 {
 	init(DEFAULT_BOARD_WIDTH, DEFAULT_BOARD_HEIGHT);
 }
 
-TetrisBoard::TetrisBoard(const int width, const int height)
+TetrisBoard::TetrisBoard(const int width, const int height) : my_piece(TetrisPiece::EMPTY_PIECE),
+		my_ghost(TetrisPiece::EMPTY_PIECE), my_hold_piece(TetrisPiece::EMPTY_PIECE)
 {
+	//my_piece = TetrisPiece(TetrisPiece::EMPTY_PIECE);
+	//my_ghost = TetrisPiece(TetrisPiece::EMPTY_PIECE);
+	//my_hold_piece = TetrisPiece(TetrisPiece::EMPTY_PIECE);
+
 	init(width, height);
 }
 
@@ -38,8 +44,8 @@ void TetrisBoard::moveLeft()
 	if(game_over)
 		return;
 
-    TetrisPiece* test = my_piece->moveLeft();
-    if(isWithinBounds(test) && !isOverlap(test))
+    TetrisPiece test = my_piece.moveLeft();
+    if(isWithinBounds(&test) && !isOverlap(&test))
     {
         my_piece = test;
         handleGhost();
@@ -52,8 +58,8 @@ void TetrisBoard::moveRight()
 	if(game_over)
 		return;
 
-    TetrisPiece* test = my_piece->moveRight();
-    if(isWithinBounds(test) && !isOverlap(test))
+    TetrisPiece test = my_piece.moveRight();
+    if(isWithinBounds(&test) && !isOverlap(&test))
     {
         my_piece = test;
         handleGhost();
@@ -66,8 +72,8 @@ void TetrisBoard::moveDown()
 	if(game_over)
 		return;
 
-    TetrisPiece* test = my_piece->moveDown();
-    if(!isWithinBounds(test) || isOverlap(test))
+    TetrisPiece test = my_piece.moveDown();
+    if(!isWithinBounds(&test) || isOverlap(&test))
     {
         placePiece();
     }
@@ -83,12 +89,12 @@ void TetrisBoard::hardDrop()
 	if(game_over)
 		return;
 
-    int y = my_piece->getLocation().y;
+    int y = my_piece.getLocation().y;
     do
     {
         moveDown();
         stat_down--;
-    }while (my_piece->getLocation().y < y);
+    }while (my_piece.getLocation().y < y);
     stat_hd++;
 }
 
@@ -97,15 +103,15 @@ void TetrisBoard::rotateCCW()
 	if(game_over)
 		return;
 
-    TetrisPiece* test = my_piece->rotateCCW();
+    TetrisPiece test = my_piece.rotateCCW();
     bool can_rotate = false;
 
-    if(isWithinBounds(test))
+    if(isWithinBounds(&test))
     {
-        if(isOverlap(test))
+        if(isOverlap(&test))
         {
-            test = test->moveUp();
-            if(!isOverlap(test) && isWithinBounds(test))
+            test = test.moveUp();
+            if(!isOverlap(&test) && isWithinBounds(&test))
             	can_rotate = true;
         }
         else
@@ -127,16 +133,16 @@ void TetrisBoard::rotateCW()
 	if(game_over)
 		return;
 
-    TetrisPiece* test = my_piece->rotateCW();
+    TetrisPiece test = my_piece.rotateCW();
 
     bool can_rotate = false;
 
-    if(isWithinBounds(test))
+    if(isWithinBounds(&test))
     {
-        if(isOverlap(test))
+        if(isOverlap(&test))
         {
-            test = test->moveUp();
-            if(!isOverlap(test) && isWithinBounds(test))
+            test = test.moveUp();
+            if(!isOverlap(&test) && isWithinBounds(&test))
             	can_rotate = true;
         }
         else
@@ -160,12 +166,12 @@ void TetrisBoard::holdPiece()
 
     if(!held)
     {
-        if(my_hold_piece->getPieceType() != TetrisPiece::EMPTY_PIECE)
+        if(my_hold_piece.getPieceType() != TetrisPiece::EMPTY_PIECE)
         {
-            TetrisPiece* temp = my_piece;
+            TetrisPiece temp = my_piece;
             my_piece = my_hold_piece;
             my_hold_piece = temp;
-            my_piece = my_piece->setLocation(board_width/2, board_height-1);
+            my_piece = my_piece.setLocation(board_width/2, board_height-1);
             handleGhost();
             held = true;
         }
@@ -192,13 +198,13 @@ std::vector<std::vector<TetrisPiece::PieceType> > TetrisBoard::getBoard()
     copy.clear();
 
     //for each row
-    for(std::vector<std::vector<TetrisPiece::PieceType>* >::iterator y
+    for(std::vector<std::vector<TetrisPiece::PieceType> >::iterator y
         = my_board.begin(), yend = my_board.end() ; y != yend ; ++y)
     {
         std::vector<TetrisPiece::PieceType> row;
         //for each block in the row
-        for(std::vector<TetrisPiece::PieceType>::iterator x = (*y)->begin(),
-            xend = (*y)->end(); x != xend ; ++x)
+        for(std::vector<TetrisPiece::PieceType>::iterator x = y->begin(),
+            xend = y->end(); x != xend ; ++x)
         {
             row.push_back(*x);
         }
@@ -209,21 +215,21 @@ std::vector<std::vector<TetrisPiece::PieceType> > TetrisBoard::getBoard()
     return copy;
 }
 
-TetrisPiece* TetrisBoard::getHold() { return my_hold_piece->getCopy(); }
+TetrisPiece TetrisBoard::getHold() { return my_hold_piece.getCopy(); }
 
-TetrisPiece* TetrisBoard::getGhost() { return my_ghost->getCopy(); }
+TetrisPiece TetrisBoard::getGhost() { return my_ghost.getCopy(); }
 
-TetrisPiece* TetrisBoard::getActivePiece() { return my_piece->getCopy(); }
+TetrisPiece TetrisBoard::getActivePiece() { return my_piece.getCopy(); }
 
-std::vector<TetrisPiece*> TetrisBoard::getBag()
+std::vector<TetrisPiece> TetrisBoard::getBag()
 {
-    std::vector<TetrisPiece*> copy;
+    std::vector<TetrisPiece> copy;
     copy.clear();
 
-    for(std::vector<TetrisPiece*>::iterator it = my_bag.begin(),
+    for(std::vector<TetrisPiece>::iterator it = my_bag.begin(),
         end = my_bag.end() ; it != end ; ++it)
     {
-        copy.push_back((*it)->getCopy());
+        copy.push_back(it->getCopy());
     }
     return copy;
 }
@@ -232,8 +238,8 @@ std::string TetrisBoard::toString()
 {
     std::stringstream ss;
 
-    std::vector<Point> pieceblocks = my_piece->getBlocks();
-    std::vector<Point> ghostblocks = my_ghost->getBlocks();
+    std::vector<Point> pieceblocks = my_piece.getBlocks();
+    std::vector<Point> ghostblocks = my_ghost.getBlocks();
 
     bool found;
     //for each row
@@ -243,8 +249,9 @@ std::string TetrisBoard::toString()
         for(int x = 0 ; x < board_width ; x++)
         {
             found = false;
+
             //if anything on the board is in this position
-            if(my_board.at(y)->at(x) != TetrisPiece::EMPTY_PIECE)
+            if(my_board.at(y).at(x) != TetrisPiece::EMPTY_PIECE)
             {
                 ss << "X";
                 found = true;
@@ -255,10 +262,10 @@ std::string TetrisBoard::toString()
             {
                 for(unsigned int i = 0 ; i < pieceblocks.size() ; i++)
                 {
-                    if(pieceblocks.at(i).y + my_piece->getLocation().y < board_height)
+                    if(pieceblocks.at(i).y + my_piece.getLocation().y < board_height)
                     {
-                        if(pieceblocks.at(i).x + my_piece->getLocation().x == x &&
-                        pieceblocks.at(i).y + my_piece->getLocation().y == y)
+                        if(pieceblocks.at(i).x + my_piece.getLocation().x == x &&
+                        pieceblocks.at(i).y + my_piece.getLocation().y == y)
                         {
                            ss << "O";
                            found = true;
@@ -273,8 +280,8 @@ std::string TetrisBoard::toString()
             {
                 for(unsigned int i = 0 ; i < ghostblocks.size() ; i++)
                 {
-                    if(ghostblocks.at(i).x + my_ghost->getLocation().x == x &&
-                       ghostblocks.at(i).y + my_ghost->getLocation().y == y)
+                    if(ghostblocks.at(i).x + my_ghost.getLocation().x == x &&
+                       ghostblocks.at(i).y + my_ghost.getLocation().y == y)
                        {
                            ss << "G";
                            found = true;
@@ -329,20 +336,20 @@ void TetrisBoard::placePiece()
 	if(game_over)
 		return;
 
-    std::vector<Point> blocks = my_piece->getBlocks();
+    std::vector<Point> blocks = my_piece.getBlocks();
     int x=0,y=0;
 
     //TODO: put gameover handling logic here! don't do the stuff below if
     //gameover or else you'll get a crash or something.
-    if(my_piece->getLocation().y + my_piece->getTop() >
+    if(my_piece.getLocation().y + my_piece.getTop() >
        board_height - NUM_HIDDEN_ROWS)
         game_over = true;
 
     //handle points. the number of points is the number of blocks on the board
     //touching the piece on an edge squared
     int edges=0;
-    x = my_piece->getLocation().x;
-    y = my_piece->getLocation().y;
+    x = my_piece.getLocation().x;
+    y = my_piece.getLocation().y;
     for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
     	i != end; ++i)
     {
@@ -363,10 +370,10 @@ void TetrisBoard::placePiece()
         for(std::vector<Point>::iterator i = blocks.begin(), end = blocks.end();
             i != end ; ++i)
         {
-            x = my_piece->getLocation().x + i->x;
-            y = my_piece->getLocation().y + i->y;
+            x = my_piece.getLocation().x + i->x;
+            y = my_piece.getLocation().y + i->y;
 
-            (*my_board[y])[x] = my_piece->getPieceType();
+            (my_board[y])[x] = my_piece.getPieceType();
 
             //TODO: update score
         }
@@ -391,7 +398,7 @@ bool TetrisBoard::isOverlap(TetrisPiece* piece)
 
         if(yp < board_height && yp >= 0)
         {
-            if((my_board.at(yp)->at(xp)) != TetrisPiece::EMPTY_PIECE)
+            if((my_board.at(yp).at(xp)) != TetrisPiece::EMPTY_PIECE)
                 return true;
         }
 
@@ -423,7 +430,7 @@ bool TetrisBoard::isOccupied(const int x, const int y)
 	if(x >=0 && x < board_width && y >=0 &&
 		y < board_height - NUM_HIDDEN_ROWS)
 	{
-		if((*my_board[y])[x] != TetrisPiece::EMPTY_PIECE)
+		if((my_board[y])[x] != TetrisPiece::EMPTY_PIECE)
 			return true;
 		else
 			return false;
@@ -444,7 +451,7 @@ void TetrisBoard::newPiece()
     my_piece = *my_bag.begin();
     my_bag.erase(my_bag.begin());
 
-    my_piece = my_piece->setLocation(board_width/2, board_height-1);
+    my_piece = my_piece.setLocation(board_width/2, board_height-1);
     stat_pieces++;
 
     handleGhost();
@@ -455,14 +462,14 @@ void TetrisBoard::handleGhost()
 	if(game_over)
 		return;
 
-    my_ghost = my_piece->getCopy();
-    while(my_ghost->getLocation().y + my_ghost->getTop() >= board_height)
-        my_ghost = my_ghost->moveDown();
+    my_ghost = my_piece.getCopy();
+    while(my_ghost.getLocation().y + my_ghost.getTop() >= board_height)
+        my_ghost = my_ghost.moveDown();
 
-    while(!isOverlap(my_ghost) && isWithinBounds(my_ghost))
-        my_ghost = my_ghost->moveDown();
+    while(!isOverlap(&my_ghost) && isWithinBounds(&my_ghost))
+        my_ghost = my_ghost.moveDown();
 
-    my_ghost = my_ghost->moveUp();
+    my_ghost = my_ghost.moveUp();
 }
 
 void TetrisBoard::handleLines()
@@ -478,13 +485,13 @@ void TetrisBoard::handleLines()
     {
         found = false;
         //for each row
-        for(std::vector<std::vector<TetrisPiece::PieceType>* >::iterator it
+        for(std::vector<std::vector<TetrisPiece::PieceType> >::iterator it
             = my_board.begin(), end = my_board.end() ; it != end ; ++it)
         {
             blockcount = 0;
             //for each item in each row
-            for(std::vector<TetrisPiece::PieceType>::iterator x = (*it)->begin(),
-                endx = (*it)->end() ; x != endx ; ++x)
+            for(std::vector<TetrisPiece::PieceType>::iterator x = (*it).begin(),
+                endx = (it)->end() ; x != endx ; ++x)
             {
                 if(*x == TetrisPiece::EMPTY_PIECE)
                     break;
@@ -499,10 +506,12 @@ void TetrisBoard::handleLines()
                 my_board.erase(it);
 
                 //add a blank line
-                std::vector<TetrisPiece::PieceType>* row =
-                    new std::vector<TetrisPiece::PieceType>();
+                std::vector<TetrisPiece::PieceType> row =
+                    std::vector<TetrisPiece::PieceType>();
+
                 for(int xp = 0 ; xp < board_width ; xp++)
-                    row->push_back(TetrisPiece::EMPTY_PIECE);
+                    row.push_back(TetrisPiece::EMPTY_PIECE);
+
                 my_board.push_back(row);
 
                 break;
@@ -550,20 +559,20 @@ void TetrisBoard::newBag()
     if((int)my_bag.size() <= TetrisPiece::NUM_PIECES)
     {
         // create a temp bag and load it with pieces
-        std::vector<TetrisPiece*> new_bag;
-        new_bag.push_back(new TetrisPiece(TetrisPiece::I));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::J));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::L));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::O));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::S));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::Z));
-        new_bag.push_back(new TetrisPiece(TetrisPiece::T));
+        std::vector<TetrisPiece> new_bag;
+        new_bag.push_back(TetrisPiece(TetrisPiece::I));
+        new_bag.push_back(TetrisPiece(TetrisPiece::J));
+        new_bag.push_back(TetrisPiece(TetrisPiece::L));
+        new_bag.push_back(TetrisPiece(TetrisPiece::O));
+        new_bag.push_back(TetrisPiece(TetrisPiece::S));
+        new_bag.push_back(TetrisPiece(TetrisPiece::Z));
+        new_bag.push_back(TetrisPiece(TetrisPiece::T));
 
         // shuffle pieces
         std::random_shuffle(new_bag.begin(), new_bag.end());
 
         // add pieces to the bag
-        for(std::vector<TetrisPiece*>::iterator i = new_bag.begin(),
+        for(std::vector<TetrisPiece>::iterator i = new_bag.begin(),
             end = new_bag.end() ; i != end ; ++i)
         {
             my_bag.push_back(*i);
@@ -576,15 +585,14 @@ void TetrisBoard::newBag()
 void TetrisBoard::emptyBoard()
 {
     my_board.clear();
-    std::vector<TetrisPiece::PieceType>* row;
+    std::vector<TetrisPiece::PieceType> row;
 
     for(int y = 0 ; y < board_height ; y++)
     {
-        row = new std::vector<TetrisPiece::PieceType>();
+        row = std::vector<TetrisPiece::PieceType>();
         for(int x = 0 ; x < board_width ; x++)
-        {
-            row->push_back(TetrisPiece::EMPTY_PIECE);
-        }
+            row.push_back(TetrisPiece::EMPTY_PIECE);
+
         my_board.push_back(row);
     }
 }
@@ -607,7 +615,7 @@ void TetrisBoard::init(const int width, const int height)
 	emptyBoard();
 	newPiece();
 
-	my_hold_piece = new TetrisPiece(TetrisPiece::EMPTY_PIECE);
+	my_hold_piece = TetrisPiece(TetrisPiece::EMPTY_PIECE);
 
 	//init stats
 	stat_cw=0; stat_ccw=0; //# of rotations

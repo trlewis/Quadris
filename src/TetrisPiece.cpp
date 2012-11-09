@@ -74,11 +74,11 @@ TetrisPiece::TetrisPiece(PieceType type)
 	}
 }
 
-TetrisPiece* TetrisPiece::rotateCCW()
+TetrisPiece TetrisPiece::rotateCCW()
 {
 	// O pieces don't get rotated, so just return the current piece
 	if(my_type == TetrisPiece::O)
-		return this;
+		return getCopy();//return this;
 
 	int oldX = 0, oldY = 0, lowX=3;
 	std::vector<Point> new_blocks;
@@ -101,7 +101,7 @@ TetrisPiece* TetrisPiece::rotateCCW()
 			new_blocks.push_back(newPoint(3,1));
 		}
 
-		return new TetrisPiece(new_blocks, my_type, my_location.x,
+		return TetrisPiece(new_blocks, my_type, my_location.x,
 				my_location.y);
 	}
 
@@ -123,14 +123,14 @@ TetrisPiece* TetrisPiece::rotateCCW()
 			end = new_blocks.end() ; it != end ; ++it)
 		it->x -= lowX;
 
-	return new TetrisPiece(new_blocks, my_type, my_location.x, my_location.y);
+	return TetrisPiece(new_blocks, my_type, my_location.x, my_location.y);
 }
 
-TetrisPiece* TetrisPiece::rotateCW()
+TetrisPiece TetrisPiece::rotateCW()
 {
 	// O pieces don't get rotated, so just return the current piece
 	if(my_type == TetrisPiece::O)
-		return this;
+		return getCopy();//return this;
 
 	int oldX = 0, oldY = 0, lowY=3;
 	std::vector<Point> new_blocks;
@@ -153,7 +153,7 @@ TetrisPiece* TetrisPiece::rotateCW()
 			new_blocks.push_back(newPoint(3,1));
 		}
 
-		return new TetrisPiece(new_blocks, my_type, my_location.x,
+		return TetrisPiece(new_blocks, my_type, my_location.x,
 				my_location.y);
 	}
 
@@ -175,37 +175,37 @@ TetrisPiece* TetrisPiece::rotateCW()
 			end = new_blocks.end() ; it != end ; ++it)
 		it->y -= lowY;
 
-	return new TetrisPiece(new_blocks, my_type, my_location.x, my_location.y);
+	return TetrisPiece(new_blocks, my_type, my_location.x, my_location.y);
 }
 
-TetrisPiece* TetrisPiece::moveLeft()
+TetrisPiece TetrisPiece::moveLeft()
 {
-	return new TetrisPiece(my_blocks, my_type, my_location.x-1, my_location.y);
+	return TetrisPiece(my_blocks, my_type, my_location.x-1, my_location.y);
 }
 
-TetrisPiece* TetrisPiece::moveRight()
+TetrisPiece TetrisPiece::moveRight()
 {
-	return new TetrisPiece(my_blocks, my_type, my_location.x+1, my_location.y);
+	return TetrisPiece(my_blocks, my_type, my_location.x+1, my_location.y);
 }
 
-TetrisPiece* TetrisPiece::moveDown()
+TetrisPiece TetrisPiece::moveDown()
 {
-	return new TetrisPiece(my_blocks, my_type, my_location.x, my_location.y-1);
+	return TetrisPiece(my_blocks, my_type, my_location.x, my_location.y-1);
 }
 
-TetrisPiece* TetrisPiece::moveUp()
+TetrisPiece TetrisPiece::moveUp()
 {
-	return new TetrisPiece(my_blocks, my_type, my_location.x, my_location.y+1);
+	return TetrisPiece(my_blocks, my_type, my_location.x, my_location.y+1);
 }
 
-TetrisPiece* TetrisPiece::setLocation(const int x, const int y)
+TetrisPiece TetrisPiece::setLocation(const int x, const int y)
 {
-	return new TetrisPiece(my_blocks, my_type, x, y);
+	return TetrisPiece(my_blocks, my_type, x, y);
 }
 
-TetrisPiece* TetrisPiece::getCopy()
+TetrisPiece TetrisPiece::getCopy()
 {
-	return new TetrisPiece(my_blocks, my_type, my_location.x, my_location.y);
+	return TetrisPiece(my_blocks, my_type, my_location.x, my_location.y);
 }
 
 Point TetrisPiece::getLocation()

@@ -26,8 +26,8 @@ protected:
 
 		for(unsigned int i = 0 ; i < my_board.size() ; i++)
 		{
-			my_board[i]->push_back((*my_board[i])[0]);
-			my_board[i]->erase(my_board[i]->begin());
+			my_board[i].push_back((my_board[i])[0]);
+			my_board[i].erase(my_board[i].begin());
 		}
 	}
 };

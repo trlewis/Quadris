@@ -57,8 +57,8 @@ private:
     //TODO: figure out why you can't just do (TetrisBoard)TreadmillBoard()
     //		in the cpp file. but instead have to declare board as a
     //		TetrisBoard or TreadmillBoard in the header to get what you want.
-    //TetrisBoard board; //the actual gameplay stuff
-    TreadmillBoard board;
+    TetrisBoard board; //the actual gameplay stuff
+    //TreadmillBoard board;
 
     Timer drop_timer; //times drops
     FrameRateRegulator frr; //regulates frame rate

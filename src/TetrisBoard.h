@@ -48,10 +48,10 @@ public:
 	bool isGameOver();
 
 	std::vector<std::vector<TetrisPiece::PieceType> > getBoard();
-	TetrisPiece* getHold();
-	TetrisPiece* getGhost();
-	TetrisPiece* getActivePiece();
-	std::vector<TetrisPiece*> getBag();
+	TetrisPiece getHold();
+	TetrisPiece getGhost();
+	TetrisPiece getActivePiece();
+	std::vector<TetrisPiece> getBag();
 
 	std::string toString();
 	bool hasEvents();//whether or not there are events not returned
@@ -62,7 +62,7 @@ public:
 	//non-virtual destructor.
 	virtual ~TetrisBoard() {}
 protected:
-	std::vector<std::vector<TetrisPiece::PieceType>* > my_board; // my_board[y][x]
+	std::vector<std::vector<TetrisPiece::PieceType> > my_board; // my_board[y][x]
 	virtual void placePiece();
 private:
 	static const int DEFAULT_BOARD_WIDTH  = 10;
@@ -70,10 +70,10 @@ private:
 	//hidden rows are always the top two of the board height
 
 	int board_width, board_height;
-	TetrisPiece* my_piece;
-	TetrisPiece* my_ghost;
-	TetrisPiece* my_hold_piece;
-	std::vector<TetrisPiece*> my_bag;
+	TetrisPiece my_piece;
+	TetrisPiece my_ghost;
+	TetrisPiece my_hold_piece;
+	std::vector<TetrisPiece> my_bag;
 
 	std::vector<BoardEvent> my_events; //gives user info on what's happening (should be a queue...)
 

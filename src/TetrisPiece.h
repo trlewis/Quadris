@@ -59,42 +59,42 @@ public:
 	 * by 90 degrees.
 	 * @return A pointer to the rotated piece.
 	 */
-	TetrisPiece* rotateCCW();
+	TetrisPiece rotateCCW();
 
 	/**
 	 * \brief Creates a new piece representing the current piece rotated CW
 	 * by 90 degrees.
 	 * @return A pointer to the rotated piece.
 	 */
-	TetrisPiece* rotateCW();
+	TetrisPiece rotateCW();
 
 	/**
 	 * \brief Creates a new piece representing the current piece moved left
 	 * one unit.
 	 * @return A pointer to the newly translated piece.
 	 */
-	TetrisPiece* moveLeft();
+	TetrisPiece moveLeft();
 
 	/**
 	 * \brief Creates a new piece representing the current piece moved right
 	 * one unit.
 	 * @return A pointer to the newly translated piece.
 	 */
-	TetrisPiece* moveRight();
+	TetrisPiece moveRight();
 
 	/**
 	 * \brief Creates a new piece representing the current piece moved down
 	 * one unit.
 	 * @return A pointer to the newly translated piece.
 	 */
-	TetrisPiece* moveDown();
+	TetrisPiece moveDown();
 
 	/**
 	 * \brief Creates a new piece representing the current piece moved up
 	 * one unit.
 	 * @return A pointer to the newly translated piece.
 	 */
-	TetrisPiece* moveUp();
+	TetrisPiece moveUp();
 
 	/**
 	 * \brief Creates a new piece representing the current piece moved
@@ -103,10 +103,10 @@ public:
 	 * @param y The Y position to place the translated piece.
 	 * @return A pointer to newly translated piece.
 	 */
-	TetrisPiece* setLocation(const int x, const int y);
+	TetrisPiece setLocation(const int x, const int y);
 
 	/** \brief Returns a copy of the piece. Useful for read-only operations. */
-	TetrisPiece* getCopy();
+	TetrisPiece getCopy();
 
 	/**
 	 * \brief Gets the current location of the piece. (read only)
@@ -165,8 +165,7 @@ private:
 	 * @param x The X position of the new piece.
 	 * @param y The Y position of the new piece.
 	 */
-	TetrisPiece(std::vector<Point> blocks, PieceType type, const int x,
-			const int y);
+	TetrisPiece(std::vector<Point> blocks, PieceType type, const int x, const int y);
 
 	/**
 	 * Helper method to determine if the current piece is a horizontally

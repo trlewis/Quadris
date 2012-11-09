@@ -22,8 +22,8 @@
 void TetrisScreen::init()
 {
     blocks.clear();
-    //board = (TetrisBoard)TreadmillBoard();
     board = TreadmillBoard();
+    //board = TreadmillBoard();
     //board = TetrisBoard();
 
     drop_time = DEFAULT_DROP_TIME;
@@ -203,7 +203,7 @@ void TetrisScreen::draw(StateManager* state_manager)
     }
 
     //draw the hold piece
-    TetrisPiece* temp = board.getHold();
+    TetrisPiece temp = board.getHold();
     std::vector<Point> pblocks;
 
     rect.x = blocksize; rect.y = blocksize;
@@ -211,30 +211,30 @@ void TetrisScreen::draw(StateManager* state_manager)
     rect.h = rect.w;
     SDL_FillRect(state_manager->screen, &rect, gray);
 
-    if(temp->getPieceType() != TetrisPiece::EMPTY_PIECE)
-        drawPiece(temp, state_manager->screen, blocksize,blocksize*5);
+    if(temp.getPieceType() != TetrisPiece::EMPTY_PIECE)
+        drawPiece(&temp, state_manager->screen, blocksize,blocksize*5);
 
 
     //draw the current piece
     temp = board.getActivePiece();
 
-    yblocks = board.getHeight() - temp->getLocation().y - TetrisBoard::NUM_HIDDEN_ROWS;
-    xblocks = BOARD_OFFSETX + temp->getLocation().x;
-    drawPiece(temp, state_manager->screen,
+    yblocks = board.getHeight() - temp.getLocation().y - TetrisBoard::NUM_HIDDEN_ROWS;
+    xblocks = BOARD_OFFSETX + temp.getLocation().x;
+    drawPiece(&temp, state_manager->screen,
         xblocks * blocksize, yblocks * blocksize);
 
     pblocks.clear();
-    pblocks = temp->getBlocks();
+    pblocks = temp.getBlocks();
 
 
     //draw the ghost piece
     temp = board.getGhost();
-    pblocks = temp->getBlocks();
+    pblocks = temp.getBlocks();
 
     SDL_FillRect(ghost_surface, &ghost_surface->clip_rect, ghost_mask);
-    yblocks = board.getHeight() - temp->getLocation().y - 1 - 3 - TetrisBoard::NUM_HIDDEN_ROWS;
-    xblocks = BOARD_OFFSETX + temp->getLocation().x;
-    drawPiece(temp, ghost_surface, 0, ghost_surface->h);
+    yblocks = board.getHeight() - temp.getLocation().y - 1 - 3 - TetrisBoard::NUM_HIDDEN_ROWS;
+    xblocks = BOARD_OFFSETX + temp.getLocation().x;
+    drawPiece(&temp, ghost_surface, 0, ghost_surface->h);
     applySurface(xblocks*blocksize,yblocks*blocksize,ghost_surface,state_manager->screen);
 
 
@@ -245,12 +245,12 @@ void TetrisScreen::draw(StateManager* state_manager)
     rect.h = 3 * blocksize * (TetrisPiece::BLOCKS_PER_PIECE + 1);
     SDL_FillRect(state_manager->screen, &rect, gray);
 
-    std::vector<TetrisPiece*> bag = board.getBag();
+    std::vector<TetrisPiece> bag = board.getBag();
     xblocks = board.getWidth() + NEXT_OFFSETX;
     for(int i = 0 ; i < 3 ; i++)
     {
         yblocks = NEXT_OFFSETY + (4*(i+1)) + i;
-        drawPiece(bag.at(i),state_manager->screen,xblocks*blocksize,yblocks*blocksize);
+        drawPiece(&bag.at(i),state_manager->screen,xblocks*blocksize,yblocks*blocksize);
     }
 
 
