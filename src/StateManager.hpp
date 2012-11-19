@@ -1,12 +1,12 @@
 /*
- * StateManager.h
+ * StateManager.hpp
  *
  * Author: Travis Lewis
  * Created on: 11 Sep 2012
  */
 
-#ifndef SCREENMANAGER_H_
-#define SCREENMANAGER_H_
+#ifndef SCREENMANAGER_HPP_
+#define SCREENMANAGER_HPP_
 
 #include <vector>
 

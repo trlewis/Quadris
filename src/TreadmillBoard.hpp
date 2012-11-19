@@ -1,14 +1,14 @@
 /*
- * TreadmillBoard.h
+ * TreadmillBoard.hpp
  *
  * Author: Travis Lewis
  * Created on: 20 Sep 2012
  */
 
-#ifndef TREADMILLBOARD_H_
-#define TREADMILLBOARD_H_
+#ifndef TREADMILLBOARD_HPP_
+#define TREADMILLBOARD_HPP_
 
-#include "TetrisBoard.h"
+#include "TetrisBoard.hpp"
 
 /** \brief A variant of the classic TetrisBoard style gameplay.
  *

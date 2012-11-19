@@ -1,14 +1,14 @@
 /*
- * GameState.h
+ * GameState.hpp
  *
  * Author: Travis Lewis
  * Created on: 11 Sep 2012
  */
 
-#ifndef GAMESCREEN_H_
-#define GAMESCREEN_H_
+#ifndef GAMESCREEN_HPP_
+#define GAMESCREEN_HPP_
 
-#include "StateManager.h"
+#include "StateManager.hpp"
 
 //NOTE: gamestates could call other gamestates! this could be useful for
 //something like a neat moving/animated background for a tetris game!

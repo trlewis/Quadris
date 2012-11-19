@@ -1,12 +1,12 @@
 /*
- * BitmapFont.h
+ * BitmapFont.hpp
  *
  * Author: Travis Lewis
  * Created on: 6 Sep 2012
  */
 
-#ifndef BITMAPFONT_H_
-#define BITMAPFONT_H_
+#ifndef BITMAPFONT_HPP_
+#define BITMAPFONT_HPP_
 
 #include "SDL/SDL.h"
 

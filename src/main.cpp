@@ -1,7 +1,7 @@
 
-#include "StateManager.h"
-#include "TetrisScreen.h"
-#include "MainMenuScreen.h"
+#include "StateManager.hpp"
+#include "TetrisScreen.hpp"
+#include "MainMenuScreen.hpp"
 
 int main(int argc, char* args[])
 {

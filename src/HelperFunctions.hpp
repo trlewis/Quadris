@@ -5,8 +5,8 @@
  * Created on: 6 Sep 2012
  */
 
-#ifndef HELPERFUNCTIONS_H_
-#define HELPERFUNCTIONS_H_
+#ifndef HELPERFUNCTIONS_HPP_
+#define HELPERFUNCTIONS_HPP_
 
 #include <string>
 

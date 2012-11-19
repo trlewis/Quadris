@@ -1,12 +1,12 @@
 /*
- * TetrisPiece.h
+ * TetrisPiece.hpp
  *
  * Author: Travis Lewis
  * Created on: 11 Sep 2012
  */
 
-#ifndef TETRISPIECE_H_
-#define TETRISPIECE_H_
+#ifndef TETRISPIECE_HPP_
+#define TETRISPIECE_HPP_
 
 #include <vector>
 

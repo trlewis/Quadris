@@ -10,9 +10,9 @@
 
 #include "SDL/SDL.h"
 
-#include "MainMenuScreen.h"
-#include "TetrisScreen.h"
-#include "BitmapFont.h"
+#include "MainMenuScreen.hpp"
+#include "TetrisScreen.hpp"
+#include "BitmapFont.hpp"
 #include "FrameRateRegulator.h"
 
 void MainMenuScreen::init()

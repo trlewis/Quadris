@@ -11,7 +11,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 
-#include "HelperFunctions.h"
+#include "HelperFunctions.hpp"
 
 
 SDL_Surface* loadImage(std::string filename)

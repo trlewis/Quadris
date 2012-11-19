@@ -1,17 +1,17 @@
 /*
- * TetrisBoard.h
+ * TetrisBoard.hpp
  *
  * Author: Travis Lewis
  * Created on: 12 Sep 2012
  */
 
-#ifndef TETRISBOARD_H_
-#define TETRISBOARD_H_
+#ifndef TETRISBOARD_HPP_
+#define TETRISBOARD_HPP_
 
 #include <vector>
 #include <string>
 
-#include "TetrisPiece.h"
+#include "TetrisPiece.hpp"
 #include "Timer.h"
 
 class TetrisBoard

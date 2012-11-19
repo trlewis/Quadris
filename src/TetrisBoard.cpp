@@ -14,7 +14,7 @@
 
 #include <algorithm>
 
-#include "TetrisBoard.h"
+#include "TetrisBoard.hpp"
 
 //TODO: fix a serious CPU killer that occurs when a block that would be above the
 //		top of the board (above the top two non-visible rows) is attempted to be

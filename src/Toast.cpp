@@ -9,9 +9,9 @@
 
 #include "SDL/SDL.h"
 
-#include "BitmapFont.h"
-#include "HelperFunctions.h"
-#include "Toast.h"
+#include "BitmapFont.hpp"
+#include "HelperFunctions.hpp"
+#include "Toast.hpp"
 
 Toast::Toast(BitmapFont* bmf, std::string message, const int x,
 	const int y, const unsigned int d_alpha)

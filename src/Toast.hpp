@@ -1,18 +1,18 @@
 /*
- * Toast.h
+ * Toast.hpp
  *
  * Author: Travis Lewis
  * Created on: 20 Sep 2012
  */
 
-#ifndef TOAST_H_
-#define TOAST_H_
+#ifndef TOAST_HPP_
+#define TOAST_HPP_
 
 #include <string>
 
 #include "SDL/SDL.h"
 
-#include "BitmapFont.h"
+#include "BitmapFont.hpp"
 
 /** \brief A quick popup message.
  *

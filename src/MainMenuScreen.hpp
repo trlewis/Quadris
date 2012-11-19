@@ -1,18 +1,18 @@
 /*
- * MainMenuScreen.h
+ * MainMenuScreen.hpp
  *
  * Author: Travis Lewis
  * Created on: 19 Sep 2012
  */
 
-#ifndef MAINMENUSCREEN_H_
-#define MAINMENUSCREEN_H_
+#ifndef MAINMENUSCREEN_HPP_
+#define MAINMENUSCREEN_HPP_
 
 #include "SDL/SDL.h"
 
-#include "BitmapFont.h"
-#include "GameState.h"
-#include "StateManager.h"
+#include "BitmapFont.hpp"
+#include "GameState.hpp"
+#include "StateManager.hpp"
 #include "FrameRateRegulator.h"
 
 class MainMenuScreen: public GameState

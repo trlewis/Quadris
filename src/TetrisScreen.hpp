@@ -1,28 +1,28 @@
 /*
- * TetrisScreen.h
+ * TetrisScreen.hpp
  *
  * Author: Travis Lewis
  * Created on: 18 Sep 2012
  */
 
-#ifndef TETRIS_SCREEN_H_
-#define TETRIS_SCREEN_H_
+#ifndef TETRIS_SCREEN_HPP_
+#define TETRIS_SCREEN_HPP_
 
 #include "SDL/SDL.h"
 
-#include "HelperFunctions.h"
+#include "HelperFunctions.hpp"
 
-#include "TetrisBoard.h"
-#include "TreadmillBoard.h"
+#include "TetrisBoard.hpp"
+#include "TreadmillBoard.hpp"
 
-#include "GameState.h"
-#include "StateManager.h"
+#include "GameState.hpp"
+#include "StateManager.hpp"
 
 #include "Timer.h"
 #include "FrameRateRegulator.h"
 
-#include "BitmapFont.h"
-#include "Toast.h"
+#include "BitmapFont.hpp"
+#include "Toast.hpp"
 
 class TetrisScreen: public GameState
 {

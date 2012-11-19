@@ -10,8 +10,8 @@
 
 #include "SDL/SDL.h"
 
-#include "StateManager.h"
-#include "GameState.h"
+#include "StateManager.hpp"
+#include "GameState.hpp"
 
 bool StateManager::init(const char* title, int width,int height, int bpp,
 		bool full_screen)

@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include "TetrisPiece.h"
+#include "TetrisPiece.hpp"
 
 TetrisPiece::TetrisPiece(PieceType type)
 {

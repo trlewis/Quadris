@@ -5,18 +5,19 @@
  * Created on: 18 Sep 2012
  */
 
+#include <iostream>
 #include <vector>
 #include <sstream>
 
 #include "SDL/SDL.h"
 
-#include "HelperFunctions.h"
-#include "BitmapFont.h"
-#include "Toast.h"
+#include "HelperFunctions.hpp"
+#include "BitmapFont.hpp"
+#include "Toast.hpp"
 
-#include "TetrisScreen.h"
-#include "TetrisBoard.h"
-#include "TreadmillBoard.h"
+#include "TetrisScreen.hpp"
+#include "TetrisBoard.hpp"
+#include "TreadmillBoard.hpp"
 
 
 void TetrisScreen::init()
@@ -109,7 +110,9 @@ void TetrisScreen::handleEvents(StateManager* state_manager)
 			case SDLK_a:
 				board.holdPiece(); break;
 			case SDLK_ESCAPE:
-				state_manager->popState(); break;
+				std::cout << board.getStats();
+				state_manager->popState();
+				break;
 			case SDLK_p:
 				state_manager->popState(); break;
 			case SDLK_SPACE: {

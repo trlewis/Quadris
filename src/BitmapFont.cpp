@@ -12,8 +12,8 @@
 
 #include "SDL/SDL.h"
 
-#include "BitmapFont.h"
-#include "HelperFunctions.h"
+#include "BitmapFont.hpp"
+#include "HelperFunctions.hpp"
 
 const std::string BitmapFont::WHITESPACE_CHARS = " -/\r\n";
 
